@@ -5,14 +5,10 @@ from __future__ import print_function
 import collections
 import math
 
-
-
 Point = collections.namedtuple("Point", ["x", "y"])
 
-
-
-
 _Hex = collections.namedtuple("Hex", ["q", "r", "s"])
+
 def Hex(q, r, s):
     assert not (round(q + r + s) != 0), "q + r + s must be 0"
     return _Hex(q, r, s)
