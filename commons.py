@@ -1,20 +1,41 @@
-from typing import Callable
-from hexagones import _Hex
+from typing import Callable, Union
 import ast
 
-# Structures de données
-Grid = _Hex
-State = Grid
-Action = tuple[int, int]
-Player = int
-Score = float
-Strategy = Callable[[State, Player], Action]
+# Types de base utilisés par l'arbitre
+Environment = ... # Ensemble des données utiles (cache, état de jeu...) pour
+                  # que votre IA puisse jouer (objet, dictionnaire, autre...)
+Cell = tuple[int, int]
+ActionGopher = Cell
+ActionDodo = tuple[Cell, Cell] # case de départ -> case d'arrivée
+Action = Union[ActionGopher, ActionDodo]
+Player = int # 1 ou 2
+State = list[tuple[Cell, Player]] # État du jeu pour la boucle de jeu
+Score = int
+Time = int
 
-# Quelques constantes
-DRAW = 0
-EMPTY = 0
-BLUE = 1
-RED = 2
+
+# Fonctions demandées par le prof
+def initialize(game: str, state: State, player: Player, 
+               hex_size: int, total_time: Time) -> Environment :
+    '''Cette fonction est lancée au début du jeu. 
+    Elle dit à quel jeu on joue, le joueur que l'on est et renvoie l'environnement, 
+    c'est-à-dire la structure de donnée (objet, dictionnaire, etc.) que vous utiliserez pour jouer.
+    '''
+    return 0
+
+def strategy(env: Environment, state: State, player: Player,
+             time_left: Time) -> tuple[Environment, Action] :
+    '''
+    Cette fonction est la strategie que vous utilisez pour jouer. 
+    Cette fonction est lancée à chaque fois que c'est à votre joueur de jouer.
+    '''
+    # Alpha beta en profondeur limitée
+    return 0
+
+def final_result(state: State, score: Score, player: Player):
+    '''Cette fonction est appelée à la fin du jeu et revoie le joueur gagnant, l'état final et le score.'''
+    return 0
+
 
 # Foncitons de base
 def pprint(grid: State) :
@@ -23,37 +44,4 @@ def pprint(grid: State) :
 
 def play(grid: State, player: Player, action: Action) -> State :
     '''Cette fonction retourne l'état de jeu après l'action d'un joueur,'''
-    return 0
-
-def strategy(grid: State, player: Player) -> Action :
-    '''Renvoie l'action choisie par un joueur en fonction de sa stratégie'''
-    return 0
-
-def strategy_brain(grid: State, player: Player) -> Action:
-    '''Cette fonction créee une interface texte permettant à un humain de jouer.'''
-    print("à vous de jouer: ", end="")
-    s = input()
-    print()
-    t = ast.literal_eval(s)
-
-    return t
-
-def strategy_first_legal(grid: State, player: Player) -> Action :
-    '''Ce joueur joue toujours la première action légale disponible.'''
-    return 0
-
-def strategy_random(grid: State, player: Player) -> Action :
-    '''Ce joueur joue au hasard l'une des actions légales disponibles.'''
-    return 0
-
-def minmax(grid: State, player: Player) -> float :
-    '''Cette fonction renvoie le score optimal de la partie en fonction d'un état'''
-    return 0
-
-def minmax_action(grid: State, player: Player, depth: int = 0) -> tuple[float, Action]:
-    '''Cette fonction renvoie l'action amenant au score optimal de la partie et ce score.'''
-    return 0
-
-def strategy_minmax(grid: State, player: Player) -> Action :
-    '''Ce joueur joue en maximaisant son score'''
     return 0
