@@ -9,7 +9,7 @@ def strategy_Gopher(env: Environment, state: State, player: Player, time_left: T
     elif player == 2: #Minimising Player
         k = 1
 
-    t = legals_gopher(state)
+    t = gopherlegals(state)[1]
     if t == [] :
         return score_gopher(state), (-1,-1)
     
@@ -30,16 +30,7 @@ def strategy_Gopher(env: Environment, state: State, player: Player, time_left: T
 
 def strategy_Gopher_optimale(env: Environment, state: State, player: Player, time_left: Time) -> tuple[Environment, Action] :
     
-
     return 
-
-def legals_gopher(grid: State, player: Player) -> list[Action] :
-    '''Cette fonction renvoie l'ensemble des actions possibles pour un joueur'''
-    # Cases adjacentes à ennemi
-    # Cases non adjacentes à soi même
-    # Legals = intersection des deux
-    return 0
-
 
 def gopherlegals(matrice, state:State, player:Player) -> [list[Action], list[Action]]: # retourne en première liste les coordonés des cases bloqués pour le joueur, et en deuxième liste les coordonnés des cases sur lesquelles il peut jouer
     dictionnaire = {}
@@ -68,14 +59,14 @@ def gopherlegals(matrice, state:State, player:Player) -> [list[Action], list[Act
             cles_b.append(cle)
     return [cles_b, cles_p]
 
-
-def evaluation_function(cases_dispos, cases_bloquées, env) -> int :
+def evaluation_function(matrice, state:State, player:Player, env:Environment) -> int :
+    cases_bloquees, cases_dispos = gopherlegals(matrice, state, player)
     score = 0
     for case in cases_dispos :
         score += env["pondérations"][case]
-    for case in cases_bloquées :
+    for case in cases_bloquees :
         score -= env["pondérations"][case]
-    return 0
+    return score
 
 def final(grid: State) -> bool:
     ''' Cette fonction renvoie vrai si le joueur actuel n'a plus de coups possibles'''
