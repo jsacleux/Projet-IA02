@@ -1,6 +1,6 @@
 from commons import play
 
-def creermatrice(n):
+def creermatrice(n: int):
     matrice = [[ 0 for i in range(2*n - 1)] for i in range(2 * n -1)]
 
     for i in range(0, n):
@@ -10,24 +10,19 @@ def creermatrice(n):
     for i in range(0, n):
         for j in range(2 * n - 2 - i, 2 * n - 1):
             matrice[n-1 + i][j] = -1
-        for i in range(n*2-1):
-            matrice[0][i] = -1
-            matrice[-1][i] = -1
-            matrice[i][0] = -1
-            matrice[i][-1] = -1
-
+    for i in range(n*2-1):
+        matrice[0][i] = -1
+        matrice[-1][i] = -1
+        matrice[i][0] = -1
+        matrice[i][-1] = -1
     return matrice
 
 
-def affichermatrice(matrice):
-    print(matrice)
-    sizeGrid = int((len(matrice) + 1) / 2)
-    print (f"   ",([" ",i - sizeGrid," "]for i in range(2 * sizeGrid - 1)),  "\n\n")
+def setmatricetostate(matrice, state: State):
+    for i in state:
+        play(matrice, i[0], i[1])
+    return matrice
 
-
-    for i in range(len(matrice)) :
-        print(" ", i + 1 - sizeGrid, " |",[( " ", matrice[i][j], " ")for j in range(len(matrice))] )
-    return
 
 def afficher_matrice(matrice):
     # Couleurs spécifiques pour chaque valeur utilisant les séquences d'échappement ANSI
@@ -63,10 +58,18 @@ def afficher_matrice(matrice):
         print()  # Nouvelle ligne
     print()
 
-def getadjacent(case):
+def getadjacenthex(case):
+    ## Attention, coordonnés hexagonaux en entrée, hex en sortie
     a = case[0]
     b = case[1]
-    return [[a, b+1],[a+1, b+1],[a+1, b],[a-1, b],[a-1, b-1],[a, b-1]]
+    return ((a, b+1),(a+1, b+1),(a+1, b),(a-1, b),(a-1, b-1),(a, b-1))
+
+def coordHextoMatrice(a : (int, int), hexsize :int):
+    return (-a[0]+hexsize,a[1]+hexsize)
+
+
+def coordMatricetoHex(a : (int, int), hexsize : int):
+    return ((-a[0]+hexsize,a[1]-hexsize))
 
 
 def test():
