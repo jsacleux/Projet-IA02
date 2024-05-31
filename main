@@ -79,7 +79,44 @@ def getadjacent(case):
     return [[a, b+1],[a+1, b+1],[a+1, b],[a-1, b],[a-1, b-1],[a, b-1]]
 
 
+def initialize(game: str, state: State, player: Player,
+               hex_size: int, total_time: Time) -> Environment:
+    x = {}
+    x["game"] = game
+    x["hex_size"] = hex_size
+    # Pas de temps dans environnement mais pris en compte dans stratégie
 
+
+
+    # implémenter le cache
+    # implémenter la grille de jeu
+
+    return x
+
+
+
+def strategy(env: Environment, state: State, player: Player,
+             time_left: Time) -> tuple[Environment, Action]:
+    if Environment["game"] == "Gopher":
+        if Environment["hex_size"] % 2 == 1 and player == 2:
+            return strategy_Gopher_optimale(env: Environment, state: State, player: Player, time_left: Time)
+        return strategy_Gopher(env: Environment, state: State, player: Player, time_left: Time)
+    if Environment["game"] == "Dodo":
+        return strategy_Dodo(env: Environment, state: State, player: Player, time_left: Time)
+    return [0,0]
+            
+
+def final_result(state: State, score: Score, player: Player):
+    
+    
+    # Pour faire des stats ou changer notre stratégie
+    
+    return
+
+
+def strategy_Gopher(env: Environment, state: State, player: Player, time_left: Time) -> tuple[Environment, Action] :
+    
+     return 
 
 
 
