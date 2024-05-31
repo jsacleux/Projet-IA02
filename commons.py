@@ -34,6 +34,7 @@ def initialize(game: str, state: State, player: Player,
 
     # implémenter le cache
     # implémenter la grille de jeu
+    # implémenter la pondération de la grille  (Les cases en exterieur valent plus que celles au milieu)
 
     return x
 

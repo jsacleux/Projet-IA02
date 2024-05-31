@@ -40,10 +40,12 @@ def legals_gopher(grid: State, player: Player) -> list[Action] :
     # Legals = intersection des deux
     return 0
 
-def evaluation_function(grid : State) -> int :
-    # Attribuer des pondérations aux cases 
-    # Evaluer un score en fonction des cases disponibles et des cases bloquées
-    # Les cases en exterieur valent plus que celles au milieu
+def evaluation_function(cases_dispos, cases_bloquées, env) -> int :
+    score = 0
+    for case in cases_dispos :
+        score += env["pondérations"][case]
+    for case in cases_bloquées :
+        score -= env["pondérations"][case]
     return 0
 
 def final(grid: State) -> bool:
