@@ -32,23 +32,25 @@ def strategy_Gopher_optimale(env: Environment, state: State, player: Player, tim
     
     return 
 
-def gopherlegals(matrice, state:State, player:Player) -> [list[Action], list[Action]]: # retourne en première liste les coordonés des cases bloqués pour le joueur, et en deuxième liste les coordonnés des cases sur lesquelles il peut jouer
+def gopherlegals(matrice, state:State, player:Player):
     dictionnaire = {}
-
     ennemi = 0
+    sizeGrid = int((len(matrice) + 1) / 2)
     if player == 1:
         ennemi = 2
     if player == 2:
         ennemi = 1
-    
+
     for i in state:
         if i[1] == ennemi :
-            for j in getadjacent(i[0]) :
-                if (matrice[j[0]][j[1]]!= -1 and matrice[j[0]][j[1]]!= 1 and matrice[j[0]][j[1]]!= 2 and dictionnaire[j]!= "B"):
+            for j in getadjacenthex(i[0]):
+                (a,b) = coordHextoMatrice(j,sizeGrid)
+                if (matrice[a][b]!= -1 and matrice[a][b]!= 1 and matrice[a][b]!= 2 and ( not (j in dictionnaire))):
                     dictionnaire[j] = "P"
-        if i[1] == player :
-            for j in getadjacent(i[0]) :
-                if (matrice[j[0]][j[1]]!= -1):
+        elif i[1] == player :
+            for j in getadjacenthex(i[0]):
+                (a, b) = coordHextoMatrice(j, sizeGrid)
+                if (matrice[a][b]!= -1):
                     dictionnaire[j] = "B"
     cles_p = [] # les coordonés des cases sur lesquelles le joueur peut jouer
     cles_b = [] # les coordonés des cases sur lesquelles le joueur ne peut pas jouer
@@ -58,6 +60,8 @@ def gopherlegals(matrice, state:State, player:Player) -> [list[Action], list[Act
         elif dictionnaire[cle] == "B":
             cles_b.append(cle)
     return [cles_b, cles_p]
+
+
 
 def evaluation_function(matrice, state:State, player:Player, env:Environment) -> int :
     cases_bloquees, cases_dispos = gopherlegals(matrice, state, player)
