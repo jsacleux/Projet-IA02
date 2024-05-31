@@ -40,6 +40,35 @@ def legals_gopher(grid: State, player: Player) -> list[Action] :
     # Legals = intersection des deux
     return 0
 
+
+def gopherlegals(matrice, state:State, player:Player) -> [list[Action], list[Action]]: # retourne en première liste les coordonés des cases bloqués pour le joueur, et en deuxième liste les coordonnés des cases sur lesquelles il peut jouer
+    dictionnaire = {}
+
+    ennemi = 0
+    if player == 1:
+        ennemi = 2
+    if player == 2:
+        ennemi = 1
+    
+    for i in state:
+        if i[1] == ennemi :
+            for j in getadjacent(i[0]) :
+                if (matrice[j[0]][j[1]]!= -1 and matrice[j[0]][j[1]]!= 1 and matrice[j[0]][j[1]]!= 2 and dictionnaire[j]!= "B"):
+                    dictionnaire[j] = "P"
+        if i[1] == player :
+            for j in getadjacent(i[0]) :
+                if (matrice[j[0]][j[1]]!= -1):
+                    dictionnaire[j] = "B"
+    cles_p = [] # les coordonés des cases sur lesquelles le joueur peut jouer
+    cles_b = [] # les coordonés des cases sur lesquelles le joueur ne peut pas jouer
+    for cle in dictionnaire:
+        if dictionnaire[cle] == "P":
+            cles_p.append(cle)
+        elif dictionnaire[cle] == "B":
+            cles_b.append(cle)
+    return [cles_b, cles_p]
+
+
 def evaluation_function(cases_dispos, cases_bloquées, env) -> int :
     score = 0
     for case in cases_dispos :
