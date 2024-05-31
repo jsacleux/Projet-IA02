@@ -64,13 +64,15 @@ def pprint(grid: State) :
     '''Cette fonction affiche la grille à un état donné'''
     return 0
 
-def play(matrice, coup, joueur):   #(grid: State, player: Player, action: Action) -> State :
-    '''Cette fonction retourne l'état de jeu après l'action d'un joueur,'''
+def play(matrice, coup, joueur):
     # On utilise ici les coordonnés -(n-1) // n-1
     sizeGrid = int((len(matrice) + 1) / 2)
-    if matrice[coup[0]+sizeGrid-1][coup[1]+sizeGrid-1] != -1:
-        matrice[coup[0]+sizeGrid-1][coup[1]+sizeGrid-1] = joueur
-    else :
+    if matrice[sizeGrid - coup[0] - 1][coup[1]+sizeGrid-1] == -1:
         print("coup hors du plateau")
-    return 0
+    elif matrice[sizeGrid - coup[0] - 1][coup[1]+sizeGrid-1] == 1:
+        print("case déjà occupée par le joueur 1")
+    elif matrice[sizeGrid - coup[0] - 1][coup[1]+sizeGrid-1] == 2:
+        print("case déjà occupée par le joueur 2")
+    else:
+        matrice[sizeGrid - coup[0] - 1][coup[1] + sizeGrid - 1] = joueur
 
