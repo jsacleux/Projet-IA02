@@ -55,14 +55,13 @@ def afficher_matrice(matrice):
 
     # Afficher les lignes avec les coordonnées et les éléments de la matrice
     for i in range(n_rows):
-        print(f"{i-sizeGrid+1:>{max_element_length}} |", end=' ')  # Coordonnées de ligne
+        print(f"{-(i-sizeGrid+1):>{max_element_length}} |", end=' ')  # Coordonnées de ligne
         for j in range(n_cols):
             valeur = matrice[i][j]
             couleur = couleurs.get(valeur, '')  # Obtenir la couleur ou utiliser la couleur par défaut
             print(f"{couleur}{valeur:>{max_element_length}}{reset_couleur}", end=' ')
         print()  # Nouvelle ligne
     print()
-
 
 def getadjacent(case):
     a = case[0]
