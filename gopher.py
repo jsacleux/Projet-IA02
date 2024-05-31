@@ -32,6 +32,10 @@ def strategy_Gopher_optimale(env: Environment, state: State, player: Player, tim
     
     return 
 
+
+# Attention il faut une fonction de conversion de coordonnées du fichier
+# matrice.py , mais il est pas importé j'ai pas envie de faire une erreur
+# d'inclusion cyclique. Si ça marche pas c'est pour ça
 def gopherlegals(matrice, state:State, player:Player):
     dictionnaire = {}
     ennemi = 0
