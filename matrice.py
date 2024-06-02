@@ -1,6 +1,6 @@
-from commons import play
+from basic_types import State
 
-def creermatrice(n: int):
+def creermatrice(n : int):
     matrice = [[ 0 for i in range(2*n - 1)] for i in range(2 * n -1)]
 
     for i in range(0, n):
@@ -15,10 +15,11 @@ def creermatrice(n: int):
         matrice[-1][i] = -1
         matrice[i][0] = -1
         matrice[i][-1] = -1
+
     return matrice
 
 
-def setmatricetostate(matrice, state: State):
+def set_matrice_to_state(matrice, state: State):
     for i in state:
         play(matrice, i[0], i[1])
     return matrice
@@ -64,30 +65,9 @@ def getadjacenthex(case):
     b = case[1]
     return ((a, b+1),(a+1, b+1),(a+1, b),(a-1, b),(a-1, b-1),(a, b-1))
 
-def coordHextoMatrice(a : (int, int), hexsize :int):
+def coordHextoMatrice(a : tuple[int, int], hexsize :int):
     return (-a[0]+hexsize,a[1]+hexsize)
 
 
-def coordMatricetoHex(a : (int, int), hexsize : int):
+def coordMatricetoHex(a : tuple[int, int], hexsize : int):
     return ((-a[0]+hexsize,a[1]-hexsize))
-
-
-def test():
-    a = creermatrice(7)
-    afficher_matrice(a)
-    play(a, [0,-6], 2)
-    play(a, [0, -5], 2)
-    play(a, [0, -4], 2)
-    play(a, [0, -3], 2)
-    play(a, [0, -2], 2)
-    play(a, [-6,0], 1)
-    play(a, [-5,0], 1)
-    play(a, [-4,0], 1)
-    play(a, [-3,0], 1)
-    play(a, [-2,0], 1)
-    afficher_matrice(a)
-    return
-
-if __name__ == '__main__':
-
-    test()

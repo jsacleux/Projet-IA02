@@ -1,0 +1,5 @@
+# Ignorer le répertoire __pycache__
+__pycache__/
+
+# Fichier test
+test.py

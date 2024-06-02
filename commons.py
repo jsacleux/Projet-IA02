@@ -1,19 +1,9 @@
-from typing import Callable, Union
-import ast
-from gopher import strategy_Gopher_optimale, strategy_Gopher
+from basic_types import State, Player, Time, Environment, Action, Score
+from gopher import strategy_Gopher_optimale, strategy_Gopher, play_gopher
 from dodo import strategy_Dodo
+from matrice import creermatrice, afficher_matrice
 
-# Types de base utilisés par l'arbitre
-Environment = dict # Ensemble des données utiles (cache, état de jeu...) pour
-                  # que votre IA puisse jouer (objet, dictionnaire, autre...)
-Cell = tuple[int, int]
-ActionGopher = Cell
-ActionDodo = tuple[Cell, Cell] # case de départ -> case d'arrivée
-Action = Union[ActionGopher, ActionDodo]
-Player = int # 1 ou 2
-State = list[tuple[Cell, Player]] # État du jeu pour la boucle de jeu
-Score = int
-Time = int
+
 
 
 # Fonctions demandées par le prof
@@ -64,15 +54,24 @@ def pprint(grid: State) :
     '''Cette fonction affiche la grille à un état donné'''
     return 0
 
-def play(matrice, coup, joueur):
-    # On utilise ici les coordonnés -(n-1) // n-1
-    sizeGrid = int((len(matrice) + 1) / 2)
-    if matrice[sizeGrid - coup[0] - 1][coup[1]+sizeGrid-1] == -1:
-        print("coup hors du plateau")
-    elif matrice[sizeGrid - coup[0] - 1][coup[1]+sizeGrid-1] == 1:
-        print("case déjà occupée par le joueur 1")
-    elif matrice[sizeGrid - coup[0] - 1][coup[1]+sizeGrid-1] == 2:
-        print("case déjà occupée par le joueur 2")
-    else:
-        matrice[sizeGrid - coup[0] - 1][coup[1] + sizeGrid - 1] = joueur
+
+def test():
+    a = creermatrice(7)
+    afficher_matrice(a)
+    play_gopher(a, [0,-6], 2)
+    play_gopher(a, [0, -5], 2)
+    play_gopher(a, [0, -4], 2)
+    play_gopher(a, [0, -3], 2)
+    play_gopher(a, [0, -2], 2)
+    play_gopher(a, [-6,0], 1)
+    play_gopher(a, [-5,0], 1)
+    play_gopher(a, [-4,0], 1)
+    play_gopher(a, [-3,0], 1)
+    play_gopher(a, [-2,0], 1)
+    afficher_matrice(a)
+    return
+
+if __name__ == '__main__':
+
+    test()
 
