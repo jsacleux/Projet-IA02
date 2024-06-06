@@ -48,7 +48,7 @@ def test():
 
 
 
-    for i in gopher.gopherlegals(a, ExempleState1, Joueur2)[1]:
+    for i in gopher.gopherlegals(a, ExempleState1, Joueur1)[0]:
        gopher.play_gopher(a, i, 4)
 
     matrice.afficher_matrice(a)
@@ -60,6 +60,8 @@ def test():
     print(" 1,1 : ",matrice.coordHextoMatrice((1, 1), 7), matrice.coordMatricetoHex((6,8,),7))
     print(" -2,-2 : ",matrice.coordHextoMatrice((-2, -2), 7), matrice.coordMatricetoHex((9,5),7))
 
+
+    print(matrice.getadjacenthex((-1,2)))
     #afficher_matrice(a)
     return
 
