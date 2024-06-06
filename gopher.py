@@ -2,6 +2,8 @@ from basic_types import Environment, State, Action, Player, Time
 from matrice import getadjacenthex, coordHextoMatrice
 from typing import List
 
+
+print("test")
 def play_gopher(matrice, coup, joueur):   #(grid: State, player: Player, action: Action) -> State :
     '''Cette fonction retourne l'état de jeu après l'action d'un joueur,'''
     # On utilise ici les coordonnés -(n-1) // n-1
