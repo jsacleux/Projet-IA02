@@ -56,19 +56,7 @@ def pprint(grid: State) :
 
 
 def test():
-    a = creermatrice(7)
-    afficher_matrice(a)
-    play_gopher(a, [0,-6], 2)
-    play_gopher(a, [0, -5], 2)
-    play_gopher(a, [0, -4], 2)
-    play_gopher(a, [0, -3], 2)
-    play_gopher(a, [0, -2], 2)
-    play_gopher(a, [-6,0], 1)
-    play_gopher(a, [-5,0], 1)
-    play_gopher(a, [-4,0], 1)
-    play_gopher(a, [-3,0], 1)
-    play_gopher(a, [-2,0], 1)
-    afficher_matrice(a)
+
     return
 
 if __name__ == '__main__':

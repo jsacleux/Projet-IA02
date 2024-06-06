@@ -21,9 +21,17 @@ def creermatrice(n : int):
 
 def set_matrice_to_state(matrice, state: State):
     for i in state:
-        play(matrice, i[0], i[1])
+        set_pion_in_matrice(matrice, i[0], i[1])
     return matrice
 
+
+def set_pion_in_matrice(matrice, coup, joueur):   #(grid: State, player: Player, action: Action) -> State :
+    sizeGrid = int((len(matrice) + 1) / 2)
+    if matrice[coup[0]+sizeGrid-1][coup[1]+sizeGrid-1] != -1:
+        matrice[coup[0]+sizeGrid-1][coup[1]+sizeGrid-1] = joueur
+    else :
+        print("coup hors du plateau")
+    return 0
 
 def afficher_matrice(matrice):
     # Couleurs spécifiques pour chaque valeur utilisant les séquences d'échappement ANSI
@@ -66,7 +74,7 @@ def getadjacenthex(case):
     return ((a, b+1),(a+1, b+1),(a+1, b),(a-1, b),(a-1, b-1),(a, b-1))
 
 def coordHextoMatrice(a : tuple[int, int], hexsize :int):
-    return (-a[0]+hexsize,a[1]+hexsize)
+    return (-a[0]+hexsize-1,a[1]+hexsize-1)
 
 
 def coordMatricetoHex(a : tuple[int, int], hexsize : int):

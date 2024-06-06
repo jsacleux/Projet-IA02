@@ -3,15 +3,20 @@ from matrice import getadjacenthex, coordHextoMatrice
 from typing import List
 
 
-print("test")
+
 def play_gopher(matrice, coup, joueur):   #(grid: State, player: Player, action: Action) -> State :
     '''Cette fonction retourne l'état de jeu après l'action d'un joueur,'''
     # On utilise ici les coordonnés -(n-1) // n-1
     sizeGrid = int((len(matrice) + 1) / 2)
-    if matrice[coup[0]+sizeGrid-1][coup[1]+sizeGrid-1] != -1:
-        matrice[coup[0]+sizeGrid-1][coup[1]+sizeGrid-1] = joueur
-    else :
+    (x,y) = coordHextoMatrice((coup[0],coup[1]), sizeGrid)
+    print(x,y, " ", coup[0],coup[1])
+    valeur = matrice[x][y]
+    if  valeur!= -1 and valeur!= 1 and valeur != 2:
+        matrice[x][y] = joueur
+    elif valeur == -1 :
         print("coup hors du plateau")
+    else :
+        print("case déjà occupé")
     return 0
 
 def alpha_beta_gopher(
@@ -68,18 +73,7 @@ def strategy_Gopher_optimale(env: Environment, state: State, player: Player, tim
     return 
 
 
-# Attention il faut une fonction de conversion de coordonnées du fichier
-# matrice.py , mais il est pas importé j'ai pas envie de faire une erreur
-# d'inclusion cyclique. Si ça marche pas c'est pour ça
-def gopherlegals(matrice, state:State, player:Player) -> List[List[Action]]: 
-    # Retourne en première liste les coordonés des cases bloqués pour le joueur
-    # Retourne en deuxième liste les coordonnés des cases sur lesquelles il peut jouer
-    dictionnaire = {}
-    sizeGrid = int((len(matrice) + 1) / 2)
 
-# Attention il faut une fonction de conversion de coordonnées du fichier
-# matrice.py , mais il est pas importé j'ai pas envie de faire une erreur
-# d'inclusion cyclique. Si ça marche pas c'est pour ça
 def gopherlegals(matrice, state:State, player:Player):
     dictionnaire = {}
     ennemi = 0
