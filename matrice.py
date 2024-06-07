@@ -28,7 +28,6 @@ def set_matrice_to_state(matrice, state: State):
 def set_pion_in_matrice(matrice, coup, joueur):   #(grid: State, player: Player, action: Action) -> State :
     sizeGrid = int((len(matrice) + 1) / 2)
     (x, y) = coordHextoMatrice((coup[0], coup[1]), sizeGrid)
-    print(x, y, " ", coup[0], coup[1])
     valeur = matrice[x][y]
     if valeur != -1 and valeur != 1 and valeur != 2:
         matrice[x][y] = joueur

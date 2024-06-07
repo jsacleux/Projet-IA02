@@ -1,6 +1,7 @@
-from basic_types import Environment, State, Action, Player, Time
-from matrice import getadjacenthex, coordHextoMatrice
+from basic_types import Environment, State, Action, Player, Time, Cell
+from matrice import getadjacenthex, coordHextoMatrice, creermatrice, set_matrice_to_state
 from typing import List
+from random import randint
 
 
 
@@ -9,7 +10,7 @@ def play_gopher(matrice, coup, joueur):   #(grid: State, player: Player, action:
     # On utilise ici les coordonnés -(n-1) // n-1
     sizeGrid = int((len(matrice) + 1) / 2)
     (x,y) = coordHextoMatrice((coup[0],coup[1]), sizeGrid)
-    print(x,y, " ", coup[0],coup[1])
+    print(x,y, " ", coup[0],coup[1]) # affichage du coup joué
     valeur = matrice[x][y]
     if  valeur!= -1 and valeur!= 1 and valeur != 2:
         matrice[x][y] = joueur
@@ -72,9 +73,16 @@ def strategy_Gopher_optimale(env: Environment, state: State, player: Player, tim
     
     return 
 
+def strategy_gopher_random(env: Environment, state: State, player: Player, time_left: Time) -> tuple[Environment, Action] :
+    a = set_matrice_to_state(creermatrice(env["hex_size"]), state)
+    liste_coups_possibles = gopherlegals(a,state,player)[1]
+    print(liste_coups_possibles)
+    x = randint(0,len(liste_coups_possibles))
+    print(x)
+    return (env,(liste_coups_possibles[x],player))
 
 
-def gopherlegals(matrice, state:State, player:Player):
+def gopherlegals(matrice, state:State, player:Player) -> tuple[list[Cell],list[Cell]]:
     dictionnaire = {}
     ennemi = 0
     sizeGrid = int((len(matrice) + 1) / 2)
@@ -101,7 +109,7 @@ def gopherlegals(matrice, state:State, player:Player):
             cles_p.append(cle)
         elif dictionnaire[cle] == "B":
             cles_b.append(cle)
-    return [cles_b, cles_p]
+    return (cles_b, cles_p)
 
 
 def evaluation_function(matrice, state:State, player:Player, env:Environment) -> int :
