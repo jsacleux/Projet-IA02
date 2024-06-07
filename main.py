@@ -27,31 +27,35 @@ ExempleState2 = [((3,2),Joueur1)]
 
 def test():
 
-    matriceAffichage = matrice.creermatrice(5)
-    matrice.set_matrice_to_state(matriceAffichage,ExempleState2)
-    enviro = {}
-    enviro["game"] = "gopher"
-    enviro["hex_size"] = 5
-    enviro["gopherJoueur1casesbloquees"] = {}
-    enviro["gopherJoueur1casesaccessibles"] = {}
-    enviro["gopherJoueur2casesbloquees"] = {}
-    enviro["gopherJoueur2casesaccessibles"] = {}
 
-    matrice.afficher_matrice(matriceAffichage)
 
-    for i in range(12):
-        print("Coup du joueur 2 : ")
-        coupJoueur2 = gopher.strategy_gopher_random(enviro,ExempleState2,Joueur2,4)[1]
-        print("Etape 1")
-        ExempleState2.append(coupJoueur2)
-        gopher.play_gopher(matriceAffichage,coupJoueur2[0], coupJoueur2[1])
-        matrice.afficher_matrice(matriceAffichage)
-        print("Coup du joueur 1 : ")
-        coupJoueur1 = gopher.strategy_gopher_random(enviro,ExempleState2,Joueur1,4)[1]
-        print("Etape 2")
-        ExempleState2.append(coupJoueur1)
-        gopher.play_gopher(matriceAffichage,coupJoueur1[0], coupJoueur1[1])
-        matrice.afficher_matrice(matriceAffichage)
+    gopher.partieGopher(gopher.strategy_gopher_random,gopher.strategy_gopher_random,5)
+
+    # matriceAffichage = matrice.creermatrice(8)
+    # matrice.set_matrice_to_state(matriceAffichage,ExempleState2)
+    # enviro = {}
+    # enviro["game"] = "gopher"
+    # enviro["hex_size"] = 8
+    # enviro["gopherJoueur1casesbloquees"] = {}
+    # enviro["gopherJoueur1casesaccessibles"] = {}
+    # enviro["gopherJoueur2casesbloquees"] = {}
+    # enviro["gopherJoueur2casesaccessibles"] = {}
+    #
+    # matrice.afficher_matrice(matriceAffichage)
+    #
+    # for i in range(30):
+    #     print("Coup du joueur 2 : ")
+    #     coupJoueur2 = gopher.strategy_gopher_random(enviro,ExempleState2,Joueur2,4)[1]
+    #     print("Etape 1")
+    #     ExempleState2.append(coupJoueur2)
+    #     gopher.play_gopher(matriceAffichage,coupJoueur2[0], coupJoueur2[1])
+    #     matrice.afficher_matrice(matriceAffichage)
+    #     print("Coup du joueur 1 : ")
+    #     coupJoueur1 = gopher.strategy_gopher_random(enviro,ExempleState2,Joueur1,4)[1]
+    #     print("Etape 2")
+    #     ExempleState2.append(coupJoueur1)
+    #     gopher.play_gopher(matriceAffichage,coupJoueur1[0], coupJoueur1[1])
+    #     matrice.afficher_matrice(matriceAffichage)
 
 
 

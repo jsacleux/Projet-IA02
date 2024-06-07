@@ -1,5 +1,5 @@
-from basic_types import Environment, State, Action, Player, Time, Cell
-from matrice import getadjacenthex, coordHextoMatrice, creermatrice, set_matrice_to_state
+from basic_types import Environment, State, Action, Player, Time, Cell, Strategy
+from matrice import getadjacenthex, coordHextoMatrice, creermatrice, set_matrice_to_state, afficher_matrice
 from typing import List
 from random import randint
 
@@ -74,7 +74,9 @@ def strategy_Gopher_optimale(env: Environment, state: State, player: Player, tim
     return 
 
 def strategy_gopher_random(env: Environment, state: State, player: Player, time_left: Time) -> tuple[Environment, Action] :
-
+    if env["NumérodeTour"] == 0:
+        env["NumérodeTour"]+=1
+        return(env,((1,1),player))
     a = set_matrice_to_state(creermatrice(env["hex_size"]), state)
     liste_coups_possibles = gopherlegals(a,state,player)[1]
     if len(liste_coups_possibles)<= 0:
@@ -83,8 +85,53 @@ def strategy_gopher_random(env: Environment, state: State, player: Player, time_
     print(liste_coups_possibles)
     x = randint(0,len(liste_coups_possibles)-1)
     print(x)
+    env["NumérodeTour"] += 1
     return (env,(liste_coups_possibles[x],player))
 
+def partieGopher(strategieJ1 : Strategy, strategieJ2 : Strategy, taillegrille: int):
+
+
+    matriceAffichage = creermatrice(taillegrille)
+    enviro = {}
+    enviro["game"] = "gopher"
+    enviro["hex_size"] = taillegrille
+    enviro["gopherJoueur1casesbloquees"] = {}
+    enviro["gopherJoueur1casesaccessibles"] = {}
+    enviro["gopherJoueur2casesbloquees"] = {}
+    enviro["gopherJoueur2casesaccessibles"] = {}
+    enviro["NumérodeTour"] = 0
+
+    statecurrentgame = []
+
+    Joueuractif = 1
+    print("Coup du joueur ", Joueuractif)
+    coupJoueur1 = strategieJ1(enviro, statecurrentgame, 1, 4)[1]
+    statecurrentgame.append(coupJoueur1)
+    play_gopher(matriceAffichage, coupJoueur1[0], coupJoueur1[1])
+    afficher_matrice(matriceAffichage)
+    Joueuractif = 2
+
+    while (len(gopherlegals(matriceAffichage,statecurrentgame,Joueuractif)[1]) > 0):
+        if Joueuractif == 1 :
+            print("Coup du joueur ",Joueuractif)
+            coupJoueur1 = strategieJ1(enviro, statecurrentgame, 1, 4)[1]
+            statecurrentgame.append(coupJoueur1)
+            play_gopher(matriceAffichage, coupJoueur1[0], coupJoueur1[1])
+            afficher_matrice(matriceAffichage)
+            Joueuractif = 2
+        elif Joueuractif == 2 :
+            print("Coup du joueur ", Joueuractif)
+            coupJoueur2 = strategieJ2(enviro, statecurrentgame, 2, 4)[1]
+            statecurrentgame.append(coupJoueur2)
+            play_gopher(matriceAffichage, coupJoueur2[0], coupJoueur2[1])
+            afficher_matrice(matriceAffichage)
+            Joueuractif = 1
+    if len(gopherlegals(matriceAffichage,statecurrentgame,Joueuractif)[1]) == 0 :
+        if Joueuractif == 1:
+            print("Le  Joueur 2 a gagné")
+        else :
+            print("Le  Joueur 1 a gagné")
+    return
 
 def gopherlegals(matrice, state:State, player:Player) -> tuple[list[Cell],list[Cell]]:
     dictionnaire = {}

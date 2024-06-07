@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union,Callable
 
 # Types de base utilisés par l'arbitre
 
@@ -12,3 +12,6 @@ Player = int # 1 ou 2
 State = list[tuple[Cell, Player]] # État du jeu pour la boucle de jeu
 Score = int
 Time = int
+
+
+Strategy = Callable[[Environment, State, Player, Time], tuple[Environment, Action]]
