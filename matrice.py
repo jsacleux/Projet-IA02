@@ -24,6 +24,14 @@ def set_matrice_to_state(matrice, state: State):
         set_pion_in_matrice(matrice, i[0], i[1])
     return matrice
 
+def is_hexcoord_in_board(coup:tuple[int,int],tailleboard:int):
+    a = coup[0]
+    b = coup[1]
+    if a*b >= 0:
+        if (-tailleboard < a) and (tailleboard > a) and (-tailleboard < b) and (tailleboard > b):
+            return True
+    #elif :
+    return
 
 def set_pion_in_matrice(matrice, coup, joueur):   #(grid: State, player: Player, action: Action) -> State :
     sizeGrid = int((len(matrice) + 1) / 2)
