@@ -27,11 +27,11 @@ ExempleState2 = [((3,2),Joueur1)]
 
 def test():
 
-    matriceAffichage = matrice.creermatrice(9)
+    matriceAffichage = matrice.creermatrice(5)
     matrice.set_matrice_to_state(matriceAffichage,ExempleState2)
     enviro = {}
     enviro["game"] = "gopher"
-    enviro["hex_size"] = 9
+    enviro["hex_size"] = 5
     enviro["gopherJoueur1casesbloquees"] = {}
     enviro["gopherJoueur1casesaccessibles"] = {}
     enviro["gopherJoueur2casesbloquees"] = {}
@@ -39,7 +39,7 @@ def test():
 
     matrice.afficher_matrice(matriceAffichage)
 
-    for i in range(5):
+    for i in range(12):
         print("Coup du joueur 2 : ")
         coupJoueur2 = gopher.strategy_gopher_random(enviro,ExempleState2,Joueur2,4)[1]
         print("Etape 1")

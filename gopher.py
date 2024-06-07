@@ -74,10 +74,14 @@ def strategy_Gopher_optimale(env: Environment, state: State, player: Player, tim
     return 
 
 def strategy_gopher_random(env: Environment, state: State, player: Player, time_left: Time) -> tuple[Environment, Action] :
+
     a = set_matrice_to_state(creermatrice(env["hex_size"]), state)
     liste_coups_possibles = gopherlegals(a,state,player)[1]
+    if len(liste_coups_possibles)<= 0:
+        print('partie perdue par le joueur : ', player)
+        return (env,((0,0),3))
     print(liste_coups_possibles)
-    x = randint(0,len(liste_coups_possibles))
+    x = randint(0,len(liste_coups_possibles)-1)
     print(x)
     return (env,(liste_coups_possibles[x],player))
 
