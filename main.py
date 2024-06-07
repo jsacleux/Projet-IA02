@@ -23,7 +23,11 @@ ExempleState1 = [((0,0),Joueur1),((1,1),Joueur2),((1,2),Joueur1),((-1,1),Joueur2
 
 
 #######
+
+
 def test():
+
+
     a = matrice.set_matrice_to_state(matrice.creermatrice(7), ExempleState1)
     matrice.afficher_matrice(a)
 

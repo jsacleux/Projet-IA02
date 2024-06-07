@@ -19,6 +19,11 @@ def initialize(game: str, state: State, player: Player,
     x = {}
     x["game"] = game
     x["hex_size"] = hex_size
+    x["gopherJoueur1casesbloquees"] = {}
+    x["gopherJoueur1casesaccessibles"] = {}
+    x["gopherJoueur2casesbloquees"] = {}
+    x["gopherJoueur2casesaccessibles"] = {}
+
     
     # Pas de temps dans environnement mais pris en compte dans stratégie
 
