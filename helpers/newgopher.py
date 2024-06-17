@@ -4,10 +4,11 @@ from typing import List
 from random import randint
 import ast
 
-def gopherlegals(matrice, state: State, player: Player) -> tuple[list[Cell], list[Cell]]:
+def gopherlegals(env : Environment, state: State, player: Player) -> tuple[list[Cell], list[Cell]]:
     dictionnaire = {}
     ennemi = 0
-    sizeGrid = int((len(matrice) + 1) / 2)
+    sizeGrid = env["hex_size"]
+    matrice = env["matrice_bordures"] #une matrice de la taille du plateau, avec seulement les bordures en -1
     if player == 1:
         ennemi = 2
     if player == 2:
@@ -15,9 +16,14 @@ def gopherlegals(matrice, state: State, player: Player) -> tuple[list[Cell], lis
 
     for i in state:
         if i[1] == ennemi:
-            for j in getadjacenthex(i[0]):
-                (a, b) = coordHextoMatrice(j, sizeGrid)
-                if (matrice[a][b] != -1 and matrice[a][b] != 1 and matrice[a][b] != 2 and (not (j in dictionnaire))):
+           for j in getadjacenthex(i[0]):
+               (a, b) = coordHextoMatrice(j, sizeGrid)
+               val = 0
+               for k in state :
+                   if k[0] == j :
+                       val = k[1]
+                       break
+                if (matrice[a][b] != -1 and val != 1 and val != 2 and (not (j in dictionnaire))):
                     dictionnaire[j] = "P"
         elif i[1] == player:
             for j in getadjacenthex(i[0]):
@@ -29,7 +35,6 @@ def gopherlegals(matrice, state: State, player: Player) -> tuple[list[Cell], lis
         if dictionnaire[cle] == "P":
             cles_p.append(cle)
     return cles_p
-
 
 def play_no_verif(state :State, action : Action, player :Player):
     x = []
