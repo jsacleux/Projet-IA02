@@ -125,3 +125,16 @@ def getBestNextMove(env : Environment, current_state : State, current_player : P
             firstRound = False
     
     return bestMove
+
+
+
+
+def strategy_gopher_MCTS(env: Environment, state: State, player: Player, time_left: Time) -> tuple[
+    Environment, Action]:
+    if env["NumérodeTour"] == 0:
+        env["NumérodeTour"] += 1
+        return (env, ((1, 1), player))
+    coup = getBestNextMove(env,state,player)
+    print(coup)
+    env["NumérodeTour"] += 1
+    return (env, (coup, player))
