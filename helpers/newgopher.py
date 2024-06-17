@@ -46,12 +46,12 @@ def play_no_verif(state :State, action : Action, player :Player):
     return x
 
 
-def get_next_moves(env :Environnement, state : State, player : Player) -> list[State]:
-    x = gopherlegals(env, state, player)
+def get_next_moves(env :Environment, state : State, player : Player) -> (list[State],list[Action]):
+    x = gopherlegals(env,state,player)
     nextmoves = []
     for i in x:
         nextmoves.append(play_no_verif(state,i,player))
-    return nextmoves
+    return (nextmoves,x)
 
 
 def change_player(player : Player) -> int:
