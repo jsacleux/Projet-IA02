@@ -1,6 +1,5 @@
-from basic_types import Environment, State, Action, Player, Time, Cell, Strategy
-from matrice import getadjacenthex, coordHextoMatrice, creermatrice, set_matrice_to_state, afficher_matrice
-from typing import List
+from basic_types import Environment, State, Action, Player, Cell, Time
+from matrice import getadjacenthex, coordHextoMatrice
 from random import randint
 import ast
 
@@ -17,9 +16,9 @@ def gopherlegals(env : Environment, state: State, player: Player) -> tuple[list[
     for i in state:
         if i[1] == ennemi:
            for j in getadjacenthex(i[0]):
-               (a, b) = coordHextoMatrice(j, sizeGrid)
-               val = 0
-               for k in state :
+                (a, b) = coordHextoMatrice(j, sizeGrid)
+                val = 0
+                for k in state :
                    if k[0] == j :
                        val = k[1]
                        break
@@ -46,8 +45,8 @@ def play_no_verif(state :State, action : Action, player :Player):
     return x
 
 
-def get_next_moves(env :Environment, state : State, player : Player) -> (list[State],list[Action]):
-    x = gopherlegals(env,state,player)
+def get_next_moves(env :Environment, state : State, player : Player) -> tuple[list[State],list[Action]]:
+    x = gopherlegals(env, state, player)
     nextmoves = []
     for i in x:
         nextmoves.append(play_no_verif(state,i,player))
@@ -62,7 +61,7 @@ def change_player(player : Player) -> int:
     else :
         return 0
     
-def has_won(env :Environnement, state : State, player :Player) -> bool:
+def has_won(env :Environment,state : State, player :Player) -> bool:
     x = gopherlegals(env, state, change_player(player))
     if x == []:
         return True
@@ -83,30 +82,31 @@ def getBestNextMove(env : Environment, current_state : State, current_player : P
         boardCopy = current_state
         
         simulationMoves = []
-        nextMoves = get_next_moves(boardCopy, player)
+        next_states, next_actions = get_next_moves(boardCopy, player)
         
         score = boardSize * boardSize
         
-        while nextMoves != []:
-            roll = randint(1, len(nextMoves)) - 1
-            boardCopy = nextMoves[roll]
+        while next_actions != []:
+            roll = randint(1, len(next_actions)) - 1
+            action = next_actions[roll]
+            state = next_states[roll]
             
-            simulationMoves.append(boardCopy)
+            simulationMoves.append((action, state))
             
-            if has_won(boardCopy, player):
+            if has_won(state, player):
                 break
             
             score -= 1
             
             player = change_player(player)
-            nextMoves = get_next_moves(boardCopy, player)
+            next_states, next_actions = get_next_moves(state, player)
         
-        firstMove = simulationMoves[0]
-        lastMove = simulationMoves[-1]
+        tuple_first_move = simulationMoves[0]
+        tuple_last_move = simulationMoves[-1]
         
-        firstMoveKey = repr(firstMove)
+        firstMoveKey = repr(tuple_first_move[0])
         
-        if player == env["us"] and has_won(boardCopy, player):
+        if player == env["us"] and has_won(state, player):
             score *= -1
         
         if firstMoveKey in evaluations:
@@ -125,8 +125,6 @@ def getBestNextMove(env : Environment, current_state : State, current_player : P
             firstRound = False
     
     return bestMove
-
-
 
 
 def strategy_gopher_MCTS(env: Environment, state: State, player: Player, time_left: Time) -> tuple[
