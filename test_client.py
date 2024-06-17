@@ -22,6 +22,8 @@ def initialize(
     x = {}
     x["game"] = game
     x["hex_size"] = hex_size
+    x["us"] = player
+    x["n_simulations"] = 200
     x["gopherJoueur1casesbloquees"] = {}
     x["gopherJoueur1casesaccessibles"] = {}
     x["gopherJoueur2casesbloquees"] = {}

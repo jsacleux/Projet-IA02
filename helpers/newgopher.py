@@ -2,6 +2,7 @@ from basic_types import Environment, State, Action, Player, Time, Cell, Strategy
 from matrice import getadjacenthex, coordHextoMatrice, creermatrice, set_matrice_to_state, afficher_matrice
 from typing import List
 from random import randint
+import ast
 
 def gopherlegals(matrice, state: State, player: Player) -> tuple[list[Cell], list[Cell]]:
     dictionnaire = {}
@@ -41,7 +42,7 @@ def play_no_verif(state :State, action : Action, player :Player):
 
 
 def get_next_moves(state : State, player : Player) -> list[State]:
-    x = gopherlegals(a,state,player)
+    x = gopherlegals(state, player)
     nextmoves = []
     for i in x:
         nextmoves.append(play_no_verif(state,i,player))
@@ -55,8 +56,67 @@ def change_player(player : Player) -> int:
         return 1
     else :
         return 0
+    
 def has_won(state : State, player :Player) -> bool:
-    x = gopherlegals(a, state, change_player(player))
+    x = gopherlegals(state, change_player(player))
     if x == []:
         return True
     return False
+
+def getBestNextMove(env : Environment, current_state : State, current_player : Player):
+    
+    numberOfSimulations = env["n_simulations"]
+    boardSize = env["hex_size"]
+    
+    evaluations = {}
+    
+    #accumulates scores for each moves
+    for generation in range(numberOfSimulations):
+        
+        player = current_player
+        
+        boardCopy = current_state
+        
+        simulationMoves = []
+        nextMoves = get_next_moves(boardCopy, player)
+        
+        score = boardSize * boardSize
+        
+        while nextMoves != []:
+            roll = randint(1, len(nextMoves)) - 1
+            boardCopy = nextMoves[roll]
+            
+            simulationMoves.append(boardCopy)
+            
+            if has_won(boardCopy, player):
+                break
+            
+            score -= 1
+            
+            player = change_player(player)
+            nextMoves = get_next_moves(boardCopy, player)
+        
+        firstMove = simulationMoves[0]
+        lastMove = simulationMoves[-1]
+        
+        firstMoveKey = repr(firstMove)
+        
+        if player == env["us"] and has_won(boardCopy, player):
+            score *= -1
+        
+        if firstMoveKey in evaluations:
+            evaluations[firstMoveKey] += score
+        else:
+            evaluations[firstMoveKey] = score
+    
+    bestMove = []
+    highestScore = 0
+    firstRound = True
+    
+    for move, score in evaluations.items():
+        if firstRound or score > highestScore:
+            highestScore = score
+            bestMove = ast.literal_eval(move)
+            firstRound = False
+    
+    return bestMove
