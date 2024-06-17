@@ -5,6 +5,8 @@ import argparse
 from typing import Dict, Any
 from gndclient import start, Action, Score, Player, State, Time, DODO_STR, GOPHER_STR
 
+from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale 
+
 Environment = Dict[str, Any]
 
 
@@ -39,25 +41,20 @@ def strategy_brain(
     t = ast.literal_eval(s)
     return (env, t)
 
-def strategy_gopher(
-    env: Environment, state: State, player: Player, time_left: Time
-) -> tuple[Environment, Action]:
-    print("New state ", state)
-    print("Time remaining ", time_left)
+def strategy(env: Environment, state: State, player: Player,
+             time_left: Time) -> tuple[Environment, Action]:
+    '''
+    Cette fonction est la strategie que vous utilisez pour jouer. 
+    Cette fonction est lancée à chaque fois que c'est à votre joueur de jouer.
+    '''
+    if env["game"] == "Gopher":
+        if env["hex_size"] % 2 == 1 and player == 2:
+            return strategy_gopher_optimale(env, state, player, time_left)
+        return strategy_gopher(env, state, player, time_left)
+    if env["game"] == "Dodo":
+        return strategy_dodo(env, state, player, time_left)
+    return tuple[0,0]
 
-    # TO DO
-
-    return (env, action)
-
-def strategy_dodo(
-    env: Environment, state: State, player: Player, time_left: Time
-) -> tuple[Environment, Action]:
-    print("New state ", state)
-    print("Time remaining ", time_left)
-
-    # TO DO
-    
-    return (env, action)
 
 def final_result(state: State, score: Score, player: Player):
     print(f"Ending: {player} wins with a score of {score}")
