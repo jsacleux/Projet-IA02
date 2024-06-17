@@ -11,11 +11,21 @@ Environment = Dict[str, Any]
 def initialize(
     game: str, state: State, player: Player, hex_size: int, total_time: Time
 ) -> Environment:
+    
     print("Init")
     print(
         f"{game} playing {player} on a grid of size {hex_size}. Time remaining: {total_time}"
     )
-    return {}
+    
+    x = {}
+    x["game"] = game
+    x["hex_size"] = hex_size
+    x["gopherJoueur1casesbloquees"] = {}
+    x["gopherJoueur1casesaccessibles"] = {}
+    x["gopherJoueur2casesbloquees"] = {}
+    x["gopherJoueur2casesaccessibles"] = {}
+    
+    return x
 
 
 def strategy_brain(
@@ -29,6 +39,25 @@ def strategy_brain(
     t = ast.literal_eval(s)
     return (env, t)
 
+def strategy_gopher(
+    env: Environment, state: State, player: Player, time_left: Time
+) -> tuple[Environment, Action]:
+    print("New state ", state)
+    print("Time remaining ", time_left)
+
+    # TO DO
+
+    return (env, action)
+
+def strategy_dodo(
+    env: Environment, state: State, player: Player, time_left: Time
+) -> tuple[Environment, Action]:
+    print("New state ", state)
+    print("Time remaining ", time_left)
+
+    # TO DO
+    
+    return (env, action)
 
 def final_result(state: State, score: Score, player: Player):
     print(f"Ending: {player} wins with a score of {score}")
