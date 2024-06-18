@@ -8,4 +8,5 @@ test.py
 # Serveur config
 config.json
 gndserver-beta-win64.exe
+gndserver-gamma-win64.exe
 server.json

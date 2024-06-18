@@ -63,7 +63,6 @@ def get_adjacent(env: dict, cell: tuple[int, int]) -> list[tuple[int, int]]:
     ]
 
     adjacent = [(x + dx, y + dy) for dx, dy in directions]
-    #print("adjacentes à priori", adjacent)
 
     # Filtrer les cellules en dehors des limites de la grille hexagonale
     adjacent = [
@@ -71,7 +70,7 @@ def get_adjacent(env: dict, cell: tuple[int, int]) -> list[tuple[int, int]]:
         if -boardSize < i < boardSize and -boardSize < j < boardSize
         and abs(i - j) < boardSize  # Assurer que (i, j) reste dans le losange
     ]
-    #print("adjacentes à posteriori", adjacent)
+
     return adjacent
 
 def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
@@ -79,7 +78,6 @@ def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
     cases_bloquees = set()
     cases_accessibles = set()
 
-    #print("state:", state)
     for cell, color in state:
         if color == player:
             cases_bloquees.add(cell) # La case n'est pas vide, on ne peut pas jouer dessus
@@ -88,9 +86,7 @@ def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
             cases_bloquees.add(cell) # La case est occupee, on ne peut pas jouer dessus
             cases_accessibles.update(get_adjacent(env, cell)) # Les cases sont adjacentes à l'ennemi, on peut jouer dessus
 
-    #print("cases_accessibles:", cases_accessibles)
-    #print("cases_bloquees:", cases_bloquees)
-    return list(cases_accessibles - cases_bloquees)
+    return [ case for case in cases_accessibles if case not in cases_bloquees]
 
 
 def play_no_verif(state: State, action: Action, player: Player) -> State:
@@ -108,8 +104,7 @@ def get_next_moves(
     env: Env, state: State, player: Player
 ) -> tuple[list[State], list[Action]]:
     
-    coups_possibles = gopherlegals_bis(env, state, player)
-    #print('legals :', coups_possibles)
+    coups_possibles = gopherlegals(env, state, player)
     state_apres_chaque_coup_possible = []
 
     for coup in coups_possibles:
@@ -127,8 +122,8 @@ def change_player(player: Player) -> int:
 
 
 def has_won(env: Env, state: State, player: Player) -> bool:
-    x = gopherlegals_bis(env, state, change_player(player))
-    if x == []:
+    coups_possibles_adversaire = gopherlegals(env, state, change_player(player))
+    if coups_possibles_adversaire == []:
         return True
     return False
 
@@ -149,18 +144,14 @@ def getBestNextMove(env: Env, current_state: State, current_player: Player, time
 
         simulationMoves = []
         next_states, next_actions = get_next_moves(env, boardCopy, player)
-        #print('Actions possibles premier coup', next_actions)
         
         score = boardSize * boardSize
 
         while next_actions != []:
             
-            #print('Actions possibles', next_actions)
             roll = randint(0, len(next_actions)) - 1
             action = next_actions[roll]
             state = next_states[roll]
-            print('Action choisie',action)
-            #print('State', state)
 
             simulationMoves.append((action, state))
 
@@ -171,7 +162,6 @@ def getBestNextMove(env: Env, current_state: State, current_player: Player, time
 
             player = change_player(player)
             next_states, next_actions = get_next_moves(env, state, player)
-            #print('Nouvelles actions possibles', next_actions)
 
         tuple_first_move = simulationMoves[0]
         tuple_last_move = simulationMoves[-1]
