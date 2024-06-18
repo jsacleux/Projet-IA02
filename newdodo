@@ -57,11 +57,13 @@ def dodolegals(env: Env, state: State, player: Player) -> list[tuple[Cell,Cell]]
     return coup_possibles
 
 
-def play_no_verif(state: State, action: Action, player: Player) -> State:
+def play_no_verif_dodo(state: State, action: Action, player: Player) -> State:
     new_state = []
     for cellule, played_by in state:
-        if cellule == action:
-            new_state.append((action, player))
+        if cellule == action[0]:
+            new_state.append((action[0], 0))
+        elif cellule == action[1]:
+            new_state.append((action(1), player))
         else:
             new_state.append((cellule, played_by))
     return new_state
