@@ -5,7 +5,9 @@ import argparse
 from typing import Dict, Any
 from gndclient import start, Action, Score, Player, State, Time, DODO_STR, GOPHER_STR
 
+from helpers.matrice import creermatrice
 from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale 
+from helpers.newgopher import getBestNextMove
 
 Environment = Dict[str, Any]
 
@@ -24,6 +26,7 @@ def initialize(
     x["hex_size"] = hex_size
     x["us"] = player
     x["n_simulations"] = 200
+    x["matrice_bordures"] = creermatrice
     x["gopherJoueur1casesbloquees"] = {}
     x["gopherJoueur1casesaccessibles"] = {}
     x["gopherJoueur2casesbloquees"] = {}
@@ -88,7 +91,7 @@ if __name__ == "__main__":
         args.password,
         available_games,
         initialize,
-        strategy_brain,
+        getBestNextMove,
         final_result,
         gui=True,
     )

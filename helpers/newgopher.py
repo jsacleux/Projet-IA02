@@ -1,9 +1,9 @@
-from basic_types import Environment, State, Action, Player, Cell, Time
-from matrice import getadjacenthex, coordHextoMatrice
+from gndclient import Env, State, Action, Player, Cell, Time
+from helpers.matrice import getadjacenthex, coordHextoMatrice
 from random import randint
 import ast
 
-def gopherlegals(env : Environment, state: State, player: Player) -> tuple[list[Cell], list[Cell]]:
+def gopherlegals(env : Env, state: State, player: Player) -> tuple[list[Cell], list[Cell]]:
     dictionnaire = {}
     ennemi = 0
     sizeGrid = env["hex_size"]
@@ -45,7 +45,7 @@ def play_no_verif(state :State, action : Action, player :Player):
     return x
 
 
-def get_next_moves(env :Environment, state : State, player : Player) -> tuple[list[State],list[Action]]:
+def get_next_moves(env :Env, state : State, player : Player) -> tuple[list[State],list[Action]]:
     x = gopherlegals(env, state, player)
     nextmoves = []
     for i in x:
@@ -61,13 +61,13 @@ def change_player(player : Player) -> int:
     else :
         return 0
     
-def has_won(env :Environment,state : State, player :Player) -> bool:
+def has_won(env :Env,state : State, player :Player) -> bool:
     x = gopherlegals(env, state, change_player(player))
     if x == []:
         return True
     return False
 
-def getBestNextMove(env : Environment, current_state : State, current_player : Player):
+def getBestNextMove(env : Env, current_state : State, current_player : Player, time : Time):
     
     numberOfSimulations = env["n_simulations"]
     boardSize = env["hex_size"]
@@ -82,7 +82,7 @@ def getBestNextMove(env : Environment, current_state : State, current_player : P
         boardCopy = current_state
         
         simulationMoves = []
-        next_states, next_actions = get_next_moves(boardCopy, player)
+        next_states, next_actions = get_next_moves(env, boardCopy, player)
         
         score = boardSize * boardSize
         
@@ -127,8 +127,8 @@ def getBestNextMove(env : Environment, current_state : State, current_player : P
     return bestMove
 
 
-def strategy_gopher_MCTS(env: Environment, state: State, player: Player, time_left: Time) -> tuple[
-    Environment, Action]:
+def strategy_gopher_MCTS(env: Env, state: State, player: Player, time_left: Time) -> tuple[
+    Env, Action]:
     if env["NumérodeTour"] == 0:
         env["NumérodeTour"] += 1
         return (env, ((1, 1), player))

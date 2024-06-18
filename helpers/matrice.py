@@ -1,4 +1,4 @@
-from basic_types import State
+from gndclient import State
 
 def creermatrice(n : int):
     matrice = [[ 0 for i in range(2*n - 1)] for i in range(2 * n -1)]
