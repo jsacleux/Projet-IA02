@@ -7,7 +7,7 @@ from gndclient import start, Action, Score, Player, State, Time, DODO_STR, GOPHE
 
 from matrice import creermatrice
 from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale
-from newgopher import strategy_gopher_MCTS
+from newgopher import premier_tour, strategy_gopher_MCTS
 
 Environment = Dict[str, Any]
 
@@ -25,7 +25,7 @@ def initialize(
     x["game"] = game
     x["hex_size"] = hex_size
     x["us"] = player
-    x["NumérodeTour"] = 0  # TO DO :Faudrait mettre à 0 que si c'est vide
+    x["premier_tour"] = premier_tour(state)
     x["n_simulations"] = 200
     x["matrice_bordures"] = creermatrice(hex_size)
     x["gopherJoueur1casesbloquees"] = {}

@@ -3,6 +3,11 @@ from matrice import getadjacenthex, coordHextoMatrice
 from random import randint
 import ast
 
+def premier_tour(state : State) -> bool :
+    for cell, player in state:
+        if player != 0:
+            return False
+    return True
 
 def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
     # TO DO : debug
@@ -144,10 +149,9 @@ def getBestNextMove(env: Env, current_state: State, current_player: Player, time
 def strategy_gopher_MCTS(
     env: Env, state: State, player: Player, time_left: Time
 ) -> tuple[Env, Action]:
-    if env["NumérodeTour"] == 0:
-        env["NumérodeTour"] += 1
+    if env["premier_tour"] == True :
+        env["premier_tour"] = False
         return (env, (1, 1))
     coup = getBestNextMove(env, state, player, time_left)
     print(coup)
-    env["NumérodeTour"] += 1
     return (env, coup)
