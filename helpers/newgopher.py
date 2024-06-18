@@ -4,6 +4,7 @@ from random import randint
 import ast
 
 def gopherlegals(env : Env, state: State, player: Player) -> tuple[list[Cell], list[Cell]]:
+    # TO DO : debug
     dictionnaire = {}
     ennemi = 0
     sizeGrid = env["hex_size"]
@@ -132,7 +133,7 @@ def strategy_gopher_MCTS(env: Env, state: State, player: Player, time_left: Time
     if env["NumérodeTour"] == 0:
         env["NumérodeTour"] += 1
         return (env, ((1, 1), player))
-    coup = getBestNextMove(env,state,player)
+    coup = getBestNextMove(env,state,player, time_left)
     print(coup)
     env["NumérodeTour"] += 1
     return (env, (coup, player))

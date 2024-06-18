@@ -7,7 +7,7 @@ from gndclient import start, Action, Score, Player, State, Time, DODO_STR, GOPHE
 
 from helpers.matrice import creermatrice
 from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale 
-from helpers.newgopher import getBestNextMove
+from helpers.newgopher import strategy_gopher_MCTS
 
 Environment = Dict[str, Any]
 
@@ -25,6 +25,7 @@ def initialize(
     x["game"] = game
     x["hex_size"] = hex_size
     x["us"] = player
+    x["NumérodeTour"] = 0 # TO DO :Faudrait mettre à 0 que si c'est vide
     x["n_simulations"] = 200
     x["matrice_bordures"] = creermatrice
     x["gopherJoueur1casesbloquees"] = {}
@@ -91,7 +92,7 @@ if __name__ == "__main__":
         args.password,
         available_games,
         initialize,
-        getBestNextMove,
+        strategy_gopher_MCTS,
         final_result,
         gui=True,
     )
