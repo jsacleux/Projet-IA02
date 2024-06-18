@@ -94,13 +94,13 @@ def getBestNextMove(env : Env, current_state : State, current_player : Player, t
             
             simulationMoves.append((action, state))
             
-            if has_won(state, player):
+            if has_won(env, state, player):
                 break
             
             score -= 1
             
             player = change_player(player)
-            next_states, next_actions = get_next_moves(state, player)
+            next_states, next_actions = get_next_moves(env, state, player)
         
         tuple_first_move = simulationMoves[0]
         tuple_last_move = simulationMoves[-1]

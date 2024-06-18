@@ -27,7 +27,7 @@ def initialize(
     x["us"] = player
     x["NumérodeTour"] = 0 # TO DO :Faudrait mettre à 0 que si c'est vide
     x["n_simulations"] = 200
-    x["matrice_bordures"] = creermatrice
+    x["matrice_bordures"] = creermatrice(hex_size)
     x["gopherJoueur1casesbloquees"] = {}
     x["gopherJoueur1casesaccessibles"] = {}
     x["gopherJoueur2casesbloquees"] = {}
