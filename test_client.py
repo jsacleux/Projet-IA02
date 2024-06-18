@@ -5,9 +5,9 @@ import argparse
 from typing import Dict, Any
 from gndclient import start, Action, Score, Player, State, Time, DODO_STR, GOPHER_STR
 
-from helpers.matrice import creermatrice
-from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale 
-from helpers.newgopher import strategy_gopher_MCTS
+from matrice import creermatrice
+from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale
+from newgopher import strategy_gopher_MCTS
 
 Environment = Dict[str, Any]
 
@@ -15,24 +15,24 @@ Environment = Dict[str, Any]
 def initialize(
     game: str, state: State, player: Player, hex_size: int, total_time: Time
 ) -> Environment:
-    
+
     print("Init")
     print(
         f"{game} playing {player} on a grid of size {hex_size}. Time remaining: {total_time}"
     )
-    
+
     x = {}
     x["game"] = game
     x["hex_size"] = hex_size
     x["us"] = player
-    x["NumérodeTour"] = 0 # TO DO :Faudrait mettre à 0 que si c'est vide
+    x["NumérodeTour"] = 0  # TO DO :Faudrait mettre à 0 que si c'est vide
     x["n_simulations"] = 200
     x["matrice_bordures"] = creermatrice(hex_size)
     x["gopherJoueur1casesbloquees"] = {}
     x["gopherJoueur1casesaccessibles"] = {}
     x["gopherJoueur2casesbloquees"] = {}
     x["gopherJoueur2casesaccessibles"] = {}
-    
+
     return x
 
 
@@ -47,19 +47,21 @@ def strategy_brain(
     t = ast.literal_eval(s)
     return (env, t)
 
-def strategy(env: Environment, state: State, player: Player,
-             time_left: Time) -> tuple[Environment, Action]:
-    '''
-    Cette fonction est la strategie que vous utilisez pour jouer. 
+
+def strategy(
+    env: Environment, state: State, player: Player, time_left: Time
+) -> tuple[Environment, Action]:
+    """
+    Cette fonction est la strategie que vous utilisez pour jouer.
     Cette fonction est lancée à chaque fois que c'est à votre joueur de jouer.
-    '''
+    """
     if env["game"] == "Gopher":
         if env["hex_size"] % 2 == 1 and player == 2:
             return strategy_gopher_optimale(env, state, player, time_left)
         return strategy_gopher(env, state, player, time_left)
     if env["game"] == "Dodo":
         return strategy_dodo(env, state, player, time_left)
-    return tuple[0,0]
+    return tuple[0, 0]
 
 
 def final_result(state: State, score: Score, player: Player):
