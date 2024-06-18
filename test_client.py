@@ -26,7 +26,7 @@ def initialize(
     x["hex_size"] = hex_size
     x["us"] = player
     x["premier_tour"] = premier_tour(state)
-    x["n_simulations"] = 200
+    x["n_simulations"] = 1
     x["matrice_bordures"] = creermatrice(hex_size)
     x["gopherJoueur1casesbloquees"] = {}
     x["gopherJoueur1casesaccessibles"] = {}

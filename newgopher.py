@@ -9,7 +9,7 @@ def premier_tour(state : State) -> bool :
             return False
     return True
 
-def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
+def gopherlegals_bis(env: Env, state: State, player: Player) -> list[Cell]:
     # TO DO : debug
     dictionnaire = {}
     ennemi = 0
@@ -21,7 +21,7 @@ def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
         ennemi = 2
     if player == 2:
         ennemi = 1
-
+    
     for i in state:
         if i[1] == ennemi:
             for j in getadjacenthex(i[0]):
@@ -50,25 +50,72 @@ def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
     return cles_p
 
 
-def play_no_verif(state: State, action: Action, player: Player):
-    x = []
-    for i in state:
-        if i[0] == action:
-            x.append((action, player))
+# TO DO : refactor parce que c'est chat gpt
+def get_adjacent(env: dict, cell: tuple[int, int]) -> list[tuple[int, int]]:
+    x, y = cell
+    boardSize = env["hex_size"]
+
+    # Déplacements pour obtenir les voisins dans une grille axiale
+    directions = [
+        (1, 0), (-1, 0), 
+        (0, 1), (0, -1), 
+        (1, 1), (-1, -1)
+    ]
+
+    adjacent = [(x + dx, y + dy) for dx, dy in directions]
+    #print("adjacentes à priori", adjacent)
+
+    # Filtrer les cellules en dehors des limites de la grille hexagonale
+    adjacent = [
+        (i, j) for i, j in adjacent
+        if -boardSize < i < boardSize and -boardSize < j < boardSize
+        and abs(i - j) < boardSize  # Assurer que (i, j) reste dans le losange
+    ]
+    #print("adjacentes à posteriori", adjacent)
+    return adjacent
+
+def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
+    
+    cases_bloquees = set()
+    cases_accessibles = set()
+
+    #print("state:", state)
+    for cell, color in state:
+        if color == player:
+            cases_bloquees.add(cell) # La case n'est pas vide, on ne peut pas jouer dessus
+            cases_bloquees.update(get_adjacent(env, cell)) # Les cases sont adjacentes à nous meme, on ne peut pas jouer dessus
+        elif color == change_player(player):
+            cases_bloquees.add(cell) # La case est occupee, on ne peut pas jouer dessus
+            cases_accessibles.update(get_adjacent(env, cell)) # Les cases sont adjacentes à l'ennemi, on peut jouer dessus
+
+    #print("cases_accessibles:", cases_accessibles)
+    #print("cases_bloquees:", cases_bloquees)
+    return list(cases_accessibles - cases_bloquees)
+
+
+def play_no_verif(state: State, action: Action, player: Player) -> State:
+    
+    new_state = []
+    for cellule, played_by in state:
+        if cellule == action:
+            new_state.append((action, player))
         else:
-            x.append(i)
-    return x
+            new_state.append((cellule, played_by))
+    return new_state
 
 
 def get_next_moves(
     env: Env, state: State, player: Player
 ) -> tuple[list[State], list[Action]]:
-    x = gopherlegals(env, state, player)
-    nextmoves = []
-    for i in x:
-        nextmoves.append(play_no_verif(state, i, player))
-    return nextmoves, x
+    
+    coups_possibles = gopherlegals_bis(env, state, player)
+    #print('legals :', coups_possibles)
+    state_apres_chaque_coup_possible = []
 
+    for coup in coups_possibles:
+        state_apres_chaque_coup_possible.append(play_no_verif(state, coup, player))
+
+    return state_apres_chaque_coup_possible, coups_possibles
 
 def change_player(player: Player) -> int:
     if player == 1:
@@ -80,7 +127,7 @@ def change_player(player: Player) -> int:
 
 
 def has_won(env: Env, state: State, player: Player) -> bool:
-    x = gopherlegals(env, state, change_player(player))
+    x = gopherlegals_bis(env, state, change_player(player))
     if x == []:
         return True
     return False
@@ -102,13 +149,18 @@ def getBestNextMove(env: Env, current_state: State, current_player: Player, time
 
         simulationMoves = []
         next_states, next_actions = get_next_moves(env, boardCopy, player)
-
+        #print('Actions possibles premier coup', next_actions)
+        
         score = boardSize * boardSize
 
         while next_actions != []:
-            roll = randint(1, len(next_actions)) - 1
+            
+            #print('Actions possibles', next_actions)
+            roll = randint(0, len(next_actions)) - 1
             action = next_actions[roll]
             state = next_states[roll]
+            print('Action choisie',action)
+            #print('State', state)
 
             simulationMoves.append((action, state))
 
@@ -119,6 +171,7 @@ def getBestNextMove(env: Env, current_state: State, current_player: Player, time
 
             player = change_player(player)
             next_states, next_actions = get_next_moves(env, state, player)
+            #print('Nouvelles actions possibles', next_actions)
 
         tuple_first_move = simulationMoves[0]
         tuple_last_move = simulationMoves[-1]
