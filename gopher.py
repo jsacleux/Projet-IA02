@@ -1,5 +1,5 @@
 from gndclient import Env, State, Action, Player, Cell, Time
-from random import randint
+import random
 import ast
 
 def premier_tour(state : State) -> bool :
@@ -97,32 +97,33 @@ def has_won(env: Env, state: State, player: Player) -> bool:
 
 def getBestNextMove(env: Env, current_state: State, current_player: Player, time: Time) -> Cell:
 
-    numberOfSimulations = env["n_simulations"]
+    number_simulations = env["n_simulations"]
     boardSize = env["hex_size"]
 
     evaluations = {}
 
-    # accumulates scores for each moves
-    for generation in range(numberOfSimulations):
+    for _ in range(number_simulations):
 
         player = current_player
-
         boardCopy = current_state
-
         simulationMoves = []
+        
         next_states, next_actions = get_next_moves(env, boardCopy, player)
         
         score = boardSize * boardSize
 
         while next_actions != []:
             
-            roll = randint(0, len(next_actions)) - 1
-            action = next_actions[roll]
-            state = next_states[roll]
+            action = random.choice(next_actions)
+            state = next_states[next_actions.index(action)]
 
             simulationMoves.append((action, state))
 
             if has_won(env, state, player):
+                if player == env["us"]:
+                    score = boardSize * boardSize
+                else:
+                    score = -boardSize * boardSize
                 break
 
             score -= 1
@@ -130,28 +131,19 @@ def getBestNextMove(env: Env, current_state: State, current_player: Player, time
             player = change_player(player)
             next_states, next_actions = get_next_moves(env, state, player)
 
-        tuple_first_move = simulationMoves[0]
-        tuple_last_move = simulationMoves[-1]
-
-        firstMoveKey = repr(tuple_first_move[0])
-
-        if player == env["us"] and has_won(env, state, player):
-            score *= -1
+        firstMoveKey = repr(simulationMoves[0][0])
 
         if firstMoveKey in evaluations:
             evaluations[firstMoveKey] += score
         else:
             evaluations[firstMoveKey] = score
 
-    bestMove = []
-    highestScore = 0
-    firstRound = True
+    highestScore = float('-inf')
 
     for move, score in evaluations.items():
-        if firstRound or score > highestScore:
+        if score > highestScore:
             highestScore = score
             bestMove = ast.literal_eval(move)
-            firstRound = False
 
     return bestMove
 
@@ -166,5 +158,5 @@ def strategy_gopher_MCTS(
         coup = (0,0)
         return env, coup
     coup = getBestNextMove(env, state, player, time_left)
-    print(coup)
+    print(f"Coup joueur {player} : {coup}" )
     return env, coup

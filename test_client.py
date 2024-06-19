@@ -68,7 +68,7 @@ def strategy_provisoire(
         return strategy_dodo_MCTS(env, state, player, time_left)
 
 def final_result(state: State, score: Score, player: Player):
-    print(f"Ending: {player} wins with a score of {score}")
+    print(f"Ending: {player} wins")
 
 
 if __name__ == "__main__":
