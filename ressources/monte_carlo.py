@@ -1,7 +1,5 @@
 import random
 import ast
-
-from matrice import afficher_matrice, set_matrice_to_state
  
 userPlayer = 'O'
 boardSize = 3
