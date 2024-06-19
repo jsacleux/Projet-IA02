@@ -6,8 +6,8 @@ from typing import Dict, Any
 from gndclient import start, Action, Score, Player, State, Time, DODO_STR, GOPHER_STR
 
 from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale
-from newgopher import premier_tour, strategy_gopher_MCTS
-from newdodo import strategy_dodo_MCTS
+from gopher import premier_tour, strategy_gopher_MCTS
+from dodo import strategy_dodo_MCTS
 
 Environment = Dict[str, Any]
 
