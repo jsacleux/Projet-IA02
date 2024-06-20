@@ -1,10 +1,11 @@
-from gndclient import Env, State, Action, Player, Cell, Time, ActionDodo
 import random
 import ast
 
+from gndclient import Env, State, Action, Player, Cell, Time, ActionDodo
+
 
 def premier_tour(state: State) -> bool:
-    for cell, player in state:
+    for _, player in state:
         if player != 0:
             return False
     return True
@@ -14,7 +15,7 @@ def get_adjacent(
     env: dict, cell: tuple[int, int], player: Player
 ) -> list[tuple[int, int]]:
     x, y = cell
-    boardSize = env["hex_size"]
+    board_size = env["hex_size"]
 
     # Déplacements pour obtenir les voisins dans une grille axiale
     directionsrouge = [(1, 0), (0, 1), (1, 1)]
@@ -28,9 +29,9 @@ def get_adjacent(
     adjacent = [
         (i, j)
         for i, j in adjacent
-        if -boardSize < i < boardSize
-        and -boardSize < j < boardSize
-        and abs(i - j) < boardSize  # Assurer que (i, j) reste dans le losange
+        if -board_size < i < board_size
+        and -board_size < j < board_size
+        and abs(i - j) < board_size  # Assurer que (i, j) reste dans le losange
     ]
     return adjacent
 
@@ -77,10 +78,9 @@ def get_next_moves(
 def change_player(player: Player) -> int:
     if player == 1:
         return 2
-    elif player == 2:
+    if player == 2:
         return 1
-    else:
-        return 0
+    return 0
 
 
 def has_won(env: Env, state: State, player: Player) -> bool:
@@ -90,35 +90,35 @@ def has_won(env: Env, state: State, player: Player) -> bool:
     return False
 
 
-def getBestNextMove(env: Env, current_state: State, current_player: Player, time: Time):
+def get_best_next_move(env: Env, current_state: State, current_player: Player, time: Time):
 
     number_simulations = env["n_simulations"]
-    boardSize = env["hex_size"]
+    board_size = env["hex_size"]
 
     evaluations: dict[str, int] = {}
 
     for _ in range(number_simulations):
 
         player = current_player
-        boardCopy = current_state
-        simulationMoves = []
+        board_copy = current_state
+        simulation_moves = []
 
-        next_states, next_actions = get_next_moves(env, boardCopy, player)
+        next_states, next_actions = get_next_moves(env, board_copy, player)
 
-        score = boardSize * boardSize
+        score = board_size * board_size
 
         while next_actions != []:
 
             action = random.choice(next_actions)
             state = next_states[next_actions.index(action)]
 
-            simulationMoves.append((action, state))
+            simulation_moves.append((action, state))
 
             if has_won(env, state, player):
                 if player == env["us"]:
-                    score = boardSize * boardSize
+                    score = board_size * board_size
                 else:
-                    score = -boardSize * boardSize
+                    score = -board_size * board_size
                 break
 
             score -= 1
@@ -126,27 +126,27 @@ def getBestNextMove(env: Env, current_state: State, current_player: Player, time
             player = change_player(player)
             next_states, next_actions = get_next_moves(env, state, player)
 
-        firstMoveKey = repr(simulationMoves[0][0])
+        first_move_key = repr(simulation_moves[0][0])
 
-        if firstMoveKey in evaluations:
-            evaluations[firstMoveKey] += score
+        if first_move_key in evaluations:
+            evaluations[first_move_key] += score
         else:
-            evaluations[firstMoveKey] = score
+            evaluations[first_move_key] = score
 
-    highestScore = float("-inf")
+    highest_score = float("-inf")
 
     for move, score in evaluations.items():
-        if score > highestScore:
-            highestScore = score
-            bestMove = ast.literal_eval(move)
+        if score > highest_score:
+            highest_score = score
+            best_move = ast.literal_eval(move)
 
-    return bestMove
+    return best_move
 
 
-def strategy_dodo_MCTS(
+def strategy_dodo_mcts(
     env: Env, state: State, player: Player, time_left: Time
 ) -> tuple[Env, Action]:
 
-    coup = getBestNextMove(env, state, player, time_left)
+    coup = get_best_next_move(env, state, player, time_left)
     print(f"Coup joueur {player} : {coup}")
     return (env, coup)

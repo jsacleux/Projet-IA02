@@ -16,8 +16,8 @@ from gndclient import (
 )
 
 from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale
-from gopher import premier_tour, strategy_gopher_MCTS
-from dodo import strategy_dodo_MCTS
+from gopher import premier_tour, strategy_gopher_mcts
+from dodo import strategy_dodo_mcts
 
 
 def initialize(
@@ -77,9 +77,9 @@ def strategy_provisoire(
     """
     print("Time left", time_left)
     if env["game"] == GOPHER_STR:
-        return strategy_gopher_MCTS(env, state, player, time_left)
+        return strategy_gopher_mcts(env, state, player, time_left)
     if env["game"] == DODO_STR:
-        return strategy_dodo_MCTS(env, state, player, time_left)
+        return strategy_dodo_mcts(env, state, player, time_left)
     return (env, (0, 0))
 
 
