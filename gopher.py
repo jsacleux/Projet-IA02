@@ -180,3 +180,47 @@ def strategy_gopher_mcts(
     coup = get_best_next_move(env, state, player)
     print(f"Coup joueur {player} : {coup}")
     return env, coup
+
+
+
+
+def strategy_gopher_opt_impaire(
+    env: Env, state: State, player: Player, time_left: Time
+) -> tuple[Env, Action]:
+    # on part du principe que player = 1
+    """ Cette fonction est la strategie optimisée pour les grilles impaires """
+    if env["premier_tour"]:
+        env["premier_tour"] = False
+        new_state = [i for i in state if i[0] != (0, 0)]
+        new_state.append(((0, 0), player))
+        env["Old_state"] = new_state
+        return env, (0, 0)
+
+    coup = get_coup_strat_opti(env, state, player)
+
+    new_state = [i for i in state if i[0] != coup]
+    new_state.append((coup, player))
+    env["Old_state"] = new_state
+
+    return env, coup
+
+def get_coup_strat_opti(env : Env, state : State, player : Player) -> Action:
+
+    x = set(env["Old_state"])
+    y = set(state)
+    dernier_coup = y - x
+
+    adjacents_z = get_adjacent(dernier_coup[0])
+
+    coup_origine = (0, 0)
+
+    for case_adjacente in adjacents_z:
+        for case_state in state:
+            if case_state[0] == case_adjacente:
+                coup_origine = case_state[0]
+
+    direction_new_coup = (dernier_coup[0] - coup_origine[0], dernier_coup[1] - coup_origine[1])
+
+    new_coup = (direction_new_coup[0] + coup_origine[0], direction_new_coup[1] + coup_origine[1])
+
+    return new_coup
