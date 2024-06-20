@@ -37,6 +37,8 @@ def get_adjacent(env: Env, cell: Cell) -> list[Cell]:
 
     return adjacent
 
+def play_randomly(env: Env, state: State, player: Player) -> ActionGopher :
+    return random.choice(gopherlegals(env,state,player))
 
 def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
     """ Cette fonction renvoie la liste des actions possibles pour un joueur"""

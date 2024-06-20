@@ -67,7 +67,7 @@ def strategy(
     Cette fonction est lancée à chaque fois que c'est à votre joueur de jouer.
     """
     if env["game"] == GOPHER_STR:
-        if env["hex_size"] % 2 == 1 and player == 2:
+        if env["hex_size"] % 2 == 1 and player == 1:
             return strategy_gopher_optimale(env, state, player, time_left)
         return strategy_gopher(env, state, player, time_left)
     if env["game"] == DODO_STR:
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         args.password,
         available_games,
         initialize,
-        strategy_provisoire,
+        strategy_gopher,
         final_result,
         gui=True,
     )
