@@ -3,36 +3,47 @@
 import ast
 import argparse
 from typing import Dict, Any
-from gndclient import start, Action, Score, Player, State, Time, DODO_STR, GOPHER_STR
+from gndclient import (
+    start,
+    Env,
+    Action,
+    Score,
+    Player,
+    State,
+    Time,
+    DODO_STR,
+    GOPHER_STR,
+)
 
 from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale
 from gopher import premier_tour, strategy_gopher_MCTS
 from dodo import strategy_dodo_MCTS
 
-Environment = Dict[str, Any]
-
 
 def initialize(
     game: str, state: State, player: Player, hex_size: int, total_time: Time
-) -> Environment:
+) -> Env:
 
     print("Init")
     print(
         f"{game} playing {player} on a grid of size {hex_size}. Time remaining: {total_time}"
     )
 
-    x = {}
-    x["game"] = game
-    x["hex_size"] = hex_size
-    x["us"] = player
-    x["premier_tour"] = premier_tour(state)
-    x["n_simulations"] = 50
-    return x
+    env: Dict[str, Any] = {}
+    env["game"] = game
+    env["hex_size"] = hex_size
+    env["us"] = player
+    env["premier_tour"] = premier_tour(state)
+    if game == GOPHER_STR:
+        env["n_simulations"] = 5000
+    else:
+        env["n_simulations"] = 50
+    return env
 
 
 def strategy_brain(
-    env: Environment, state: State, player: Player, time_left: Time
-) -> tuple[Environment, Action]:
+    env: Env, state: State, player: Player, time_left: Time
+) -> tuple[Env, Action]:
     print("New state ", state)
     print("Time remaining ", time_left)
     print("What's your play ? ", end="")
@@ -43,8 +54,8 @@ def strategy_brain(
 
 
 def strategy(
-    env: Environment, state: State, player: Player, time_left: Time
-) -> tuple[Environment, Action]:
+    env: Env, state: State, player: Player, time_left: Time
+) -> tuple[Env, Action]:
     """
     Cette fonction est la strategie que vous utilisez pour jouer.
     Cette fonction est lancée à chaque fois que c'est à votre joueur de jouer.
@@ -55,17 +66,22 @@ def strategy(
         return strategy_gopher(env, state, player, time_left)
     if env["game"] == DODO_STR:
         return strategy_dodo(env, state, player, time_left)
+    return (env, (0, 0))
+
 
 def strategy_provisoire(
-    env: Environment, state: State, player: Player, time_left: Time
-) -> tuple[Environment, Action]:
+    env: Env, state: State, player: Player, time_left: Time
+) -> tuple[Env, Action]:
     """
     MCTS dodo et gopher
     """
+    print("Time left", time_left)
     if env["game"] == GOPHER_STR:
         return strategy_gopher_MCTS(env, state, player, time_left)
     if env["game"] == DODO_STR:
         return strategy_dodo_MCTS(env, state, player, time_left)
+    return (env, (0, 0))
+
 
 def final_result(state: State, score: Score, player: Player):
     print(f"Ending: {player} wins")

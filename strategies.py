@@ -12,7 +12,7 @@ def strategy_gopher_optimale(
 
     # TO DO
 
-    return (env, action)
+    return (env, (0, 0))
 
 
 def strategy_gopher(
@@ -23,7 +23,7 @@ def strategy_gopher(
 
     # TO DO
 
-    return (env, action)
+    return (env, (0, 0))
 
 
 def strategy_dodo(
@@ -34,4 +34,4 @@ def strategy_dodo(
 
     # TO DO
 
-    return (env, action)
+    return (env, (0, 0))
