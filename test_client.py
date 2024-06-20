@@ -1,3 +1,7 @@
+"""
+Ce fichier permet de se connecter au serveur et de jouer
+"""
+
 #!/usr/bin/python3
 
 import ast
@@ -23,7 +27,7 @@ from dodo import strategy_dodo_mcts
 def initialize(
     game: str, state: State, player: Player, hex_size: int, total_time: Time
 ) -> Env:
-
+    """ Cette fonction est appelée au début de la partie"""
     print("Init")
     print(
         f"{game} playing {player} on a grid of size {hex_size}. Time remaining: {total_time}"
@@ -44,6 +48,8 @@ def initialize(
 def strategy_brain(
     env: Env, state: State, player: Player, time_left: Time
 ) -> tuple[Env, Action]:
+    """ Fonction pour jouer en tant qu'humain"""
+    print("New state ", player)
     print("New state ", state)
     print("Time remaining ", time_left)
     print("What's your play ? ", end="")
@@ -73,7 +79,7 @@ def strategy_provisoire(
     env: Env, state: State, player: Player, time_left: Time
 ) -> tuple[Env, Action]:
     """
-    MCTS dodo et gopher
+    Fonctions définissant la stratégie à utiliser
     """
     print("Time left", time_left)
     if env["game"] == GOPHER_STR:
@@ -84,6 +90,9 @@ def strategy_provisoire(
 
 
 def final_result(state: State, score: Score, player: Player):
+    """
+    Cette fonction est appelee à la fin de la partie
+    """
     print(f"Ending: {player} wins")
 
 
