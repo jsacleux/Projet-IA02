@@ -37,7 +37,8 @@ def get_adjacent(env: Env, cell: Cell) -> list[Cell]:
 
     return adjacent
 
-def play_randomly(env: Env, state: State, player: Player) -> ActionGopher :
+def play_randomly_gopher(env: Env, state: State, player: Player) -> ActionGopher :
+    """ Cette fonction renvoie une action au hasard"""
     return random.choice(gopherlegals(env,state,player))
 
 def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
@@ -181,28 +182,6 @@ def strategy_gopher_mcts(
     print(f"Coup joueur {player} : {coup}")
     return env, coup
 
-
-
-
-def strategy_gopher_opt_impaire(
-    env: Env, state: State, player: Player, time_left: Time
-) -> tuple[Env, Action]:
-    # on part du principe que player = 1
-    """ Cette fonction est la strategie optimisée pour les grilles impaires """
-    if env["premier_tour"]:
-        env["premier_tour"] = False
-        new_state = [i for i in state if i[0] != (0, 0)]
-        new_state.append(((0, 0), player))
-        env["Old_state"] = new_state
-        return env, (0, 0)
-
-    coup = get_coup_strat_opti(env, state, player)
-
-    new_state = [i for i in state if i[0] != coup]
-    new_state.append((coup, player))
-    env["Old_state"] = new_state
-
-    return env, coup
 
 def get_coup_strat_opti(env : Env, state : State, player : Player) -> Action:
 

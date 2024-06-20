@@ -166,3 +166,10 @@ def strategy_dodo_mcts(
     coup = get_best_next_move(env, state, player)
     print(f"Coup joueur {player} : {coup}")
     return (env, coup)
+
+
+def play_randomly_dodo(
+    env: Env, state: State, player: Player, time_left: Time
+)-> tuple[Env, Action]:
+    """ Cette fonction renvoie une action au hasard"""
+    return random.choice(dodolegals(env,state,player))

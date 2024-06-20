@@ -19,7 +19,7 @@ from gndclient import (
     GOPHER_STR,
 )
 
-from strategies import strategy_dodo, strategy_gopher, strategy_gopher_optimale
+from strategies import strategy_dodo, strategy_gopher, strategy_gopher_opt_impaire
 from gopher import premier_tour, strategy_gopher_mcts
 from dodo import strategy_dodo_mcts
 
@@ -39,7 +39,7 @@ def initialize(
     env["us"] = player
     env["premier_tour"] = premier_tour(state)
     if game == GOPHER_STR:
-        env["n_simulations"] = 5000
+        env["n_simulations"] = 500
     else:
         env["n_simulations"] = 50
     return env
@@ -68,24 +68,10 @@ def strategy(
     """
     if env["game"] == GOPHER_STR:
         if env["hex_size"] % 2 == 1 and player == 1:
-            return strategy_gopher_optimale(env, state, player, time_left)
+            return strategy_gopher_opt_impaire(env, state, player, time_left)
         return strategy_gopher(env, state, player, time_left)
     if env["game"] == DODO_STR:
         return strategy_dodo(env, state, player, time_left)
-    return (env, (0, 0))
-
-
-def strategy_provisoire(
-    env: Env, state: State, player: Player, time_left: Time
-) -> tuple[Env, Action]:
-    """
-    Fonctions définissant la stratégie à utiliser
-    """
-    print("Time left", time_left)
-    if env["game"] == GOPHER_STR:
-        return strategy_gopher_mcts(env, state, player, time_left)
-    if env["game"] == DODO_STR:
-        return strategy_dodo_mcts(env, state, player, time_left)
     return (env, (0, 0))
 
 
@@ -122,7 +108,7 @@ if __name__ == "__main__":
         args.password,
         available_games,
         initialize,
-        strategy_gopher,
+        strategy,
         final_result,
         gui=True,
     )
