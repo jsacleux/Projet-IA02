@@ -119,9 +119,9 @@ def simulate_game(
 
         if has_won(env, state, player):
             if player == env["us"]:
-                score = env["hex_size"] * env["hex_size"]
-            else:
                 score = -env["hex_size"] * env["hex_size"]
+            else:
+                score = env["hex_size"] * env["hex_size"]
             break
 
         score -= 1
