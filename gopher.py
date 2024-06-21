@@ -184,22 +184,24 @@ def strategy_gopher_mcts(
 
 
 def get_coup_strat_opti(env : Env, state : State, player : Player) -> Action:
-
-    x = set(env["Old_state"])
+    old_state = env["Old_state"]
+    x = set(old_state)
     y = set(state)
-    dernier_coup = y - x
-
-    adjacents_z = get_adjacent(dernier_coup[0])
+    set_dernier_coup = y - x
+    print(set_dernier_coup)
+    dernier_coup,dernier_joueur = next(iter(set_dernier_coup))
+    print(dernier_coup)
+    adjacents_z = get_adjacent(env, dernier_coup)
 
     coup_origine = (0, 0)
 
     for case_adjacente in adjacents_z:
         for case_state in state:
-            if case_state[0] == case_adjacente:
+            if case_state[0] == case_adjacente and case_state[1] != 0:
                 coup_origine = case_state[0]
 
     direction_new_coup = (dernier_coup[0] - coup_origine[0], dernier_coup[1] - coup_origine[1])
 
-    new_coup = (direction_new_coup[0] + coup_origine[0], direction_new_coup[1] + coup_origine[1])
+    new_coup = (direction_new_coup[0] + dernier_coup[0], direction_new_coup[1] + dernier_coup[1])
 
     return new_coup
