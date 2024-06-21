@@ -54,7 +54,6 @@ def strategy_brain(
     print("Time remaining ", time_left)
     print("What's your play ? ", end="")
     s = input()
-    print()
     t = ast.literal_eval(s)
     return (env, t)
 
