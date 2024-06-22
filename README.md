@@ -1,6 +1,6 @@
 # Projet IA02 : 
 
-Implémentation de stratégies pour les jeux **Dodo** et **Gopher** (Mark Steere) développée par **Gautier MIRALLES** et **Juliette SACLEUX** dans le cadre de l'UV IA02, au semestre P24.
+Implémentation de stratégies pour les jeux **Dodo** et **Gopher** (Mark Steere) développée par **Gautier MIRALLES** et **Juliette SACLEUX** dans le cadre de l'UV IA02, au semestre P24, groupe 8.
 
 Nous utilisons principalement une stratégie basée sur les Arbres de Recherche de Monte Carlo (MCTS), sauf dans certains cas spécifiques (premier coup, temps restant faible, taille impaire pour Gopher en tant que joueur 1...).
 
