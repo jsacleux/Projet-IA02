@@ -2,7 +2,7 @@
 
 Implémentation de stratégies pour les jeux Dodo et Gopher (Mark Steere) par Gautier MIRALLES et Juliette SACLEUX.
 
-Sauf dans certains cas de figures précis (premier coup, temps restant faible, gopher de taille impair en tant que joueur 1...), nous utilisons une stratégie dans l'esprit des Arbres de Recherche de Monte Carlo.
+Sauf dans certains cas de figures précis (premier coup, temps restant faible, gopher de taille impaire en tant que joueur 1...), nous utilisons une stratégie dans l'esprit des Arbres de Recherche de Monte Carlo.
 
 # Guide utilisateur
 
