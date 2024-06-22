@@ -10,7 +10,8 @@ from gndclient import Env, State, Action, Player, Cell, Time, ActionDodo
 def get_adjacent(
     env: dict, cell: tuple[int, int], player: Player
 ) -> list[tuple[int, int]]:
-    """ Cette fonction renvoie la liste des cellules adjacentes à une cellule donnée"""
+    """ Cette fonction renvoie la liste des cellules adjacentes à une cellule donnée, dans la direction où
+    le joueur est autorisé à ce déplacer. """
     x, y = cell
     board_size = env["hex_size"]
 
@@ -92,8 +93,8 @@ def change_player(player: Player) -> int:
     return 0
 
 
-def has_won(env: Env, state: State, player: Player) -> bool:
-    """ Cette fonction renvoie vrai si le joueur a gagné"""
+def has_lost(env: Env, state: State, player: Player) -> bool:
+    """ Cette fonction renvoie vrai si le joueur a perdu"""
     coups_possibles_adversaire = dodolegals(env, state, change_player(player))
     if not coups_possibles_adversaire:
         return True
@@ -117,7 +118,7 @@ def simulate_game(
 
         simulation_moves.append((action, state))
 
-        if has_won(env, state, player):
+        if has_lost(env, state, player):
             if player == env["us"]:
                 score = -env["hex_size"] * env["hex_size"]
             else:
@@ -133,7 +134,7 @@ def simulate_game(
 def get_best_next_move(
     env: Env, current_state: State, current_player: Player,
 ) -> Cell:
-    """ Cette fonction renvoie l'action avec le meilleur score"""
+    """ Cette fonction renvoie l'action avec le meilleur score. C'est le corps de notre MCTS"""
     evaluations: dict[str, int] = {}
 
     for _ in range(env["n_simulations"]):
@@ -171,5 +172,5 @@ def strategy_dodo_mcts(
 def play_randomly_dodo(
     env: Env, state: State, player: Player, time_left: Time
 )-> tuple[Env, Action]:
-    """ Cette fonction renvoie une action au hasard"""
+    """ Cette fonction renvoie une action au hasard """
     return random.choice(dodolegals(env,state,player))
