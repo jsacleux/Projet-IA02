@@ -1,50 +1,20 @@
 # Projet IA02 : 
- Implémentation des jeux Dodo et Gopher (Mark Steere)
- 
- Gautier MIRALLES, Juliette SACLEUX
 
-Structure hexagone provenant de https://www.redblobgames.com/grids/hexagons/codegen/output/lib.py
+Implémentation de stratégies pour les jeux Dodo et Gopher (Mark Steere) par Gautier MIRALLES et Juliette SACLEUX.
 
 
-# Mise en place des outils de jeu
+# Guide utilisateur
 
-## Utilisation du server
+## Mise en place
 
-Le serveur s'exécute en ligne de commande (terminal sous linux et macOS, powershell sous windows) 
+1. Mettez tous nos fichiers dans votre repertoire de travail
+2. Si votre machine n'est pas très performante, diminuez env["n_simulations"] dans la fonciton initialize de test_client.py pour éviter les Time Out. 
 
-1. Copier le bon executable dans votre répertoire de travail. On suppose par la suite que l'exécutable s'appelle `gndserver`
-2. Ajouter les droits en exécution (si besoin sous linux et MaxOS) : `chmod a+x gndserver`
-3. Vérifier le fonctionnement et voir les options : `./gndserver`
+## Exécution
 
-```bash
-# toutes les options
-./gndserver -h
-```
-
-```bash
-# lancer un serveur de dodo contre un joueur random
-./gndserver -game dodo -random 
-```
-
-```bash
-# lancer un serveur de gopher contre un joueur random
-./gndserver -game gopher -random
-```
-
-```bash
-# lancer un serveur de gopher contre un joueur random gopher qui sera la joueur bleu
-./gndserver -game gopher -rcolor blue -random
-```
-
-```bash
-# tout réinitialiser
-rm config.json server.json
-```
-
-## Utilisation du client
-
-1. Copier le fichier `gndclient.py` dans votre répertoire de travail
-2. Pour tester, copier le répertoire `test_client.py` dans votre répertoire de travail
+1. Lancer le serveur
+2. Si besoin, modifier l'adresse du serveur dans test_client.py (par défaut c'est http://localhost:8080/)
+3. Lancer le client `test_client.py` avec 3 argument : le numéro de groupe, le nom, et le mot de passe.
 
 ```bash
 # lancer le client
