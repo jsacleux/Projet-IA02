@@ -37,18 +37,18 @@ def initialize(
     env["game"] = game
     env["hex_size"] = hex_size
     env["us"] = player
-    env["premier_tour"] = premier_tour(state)
+    env["premier_tour"] = premier_tour(state) # un attribut booléen pour savoir si le tour est le premier.
     if game == GOPHER_STR:
-        env["n_simulations"] = 500
+        env["n_simulations"] = 2000 # le nombre de simulation pour notre MCTS de gopher
     else:
-        env["n_simulations"] = 50
+        env["n_simulations"] = 1000  # le nombre de simulation pour notre MCTS de gopher
     return env
 
 
 def strategy_brain(
     env: Env, state: State, player: Player, time_left: Time
 ) -> tuple[Env, Action]:
-    """ Fonction pour jouer en tant qu'humain"""
+    """ Fonction pour jouer en tant qu'humain. N'est jamais utilisé ici."""
     print("New state ", player)
     print("New state ", state)
     print("Time remaining ", time_left)
@@ -62,8 +62,9 @@ def strategy(
     env: Env, state: State, player: Player, time_left: Time
 ) -> tuple[Env, Action]:
     """
-    Cette fonction est la strategie que vous utilisez pour jouer.
-    Cette fonction est lancée à chaque fois que c'est à votre joueur de jouer.
+    Nous appelons cette fonction quel que soit le jeu et les conditions de la partie.
+    Elle nous permet de faire le choix entre les différentes stratégies que nous avons crées.
+    La stratégie appelée est la même tout au long d'une même partie.
     """
     if env["game"] == GOPHER_STR:
         if env["hex_size"] % 2 == 1 and player == 1:
@@ -89,7 +90,7 @@ if __name__ == "__main__":
     parser.add_argument("group_id")
     parser.add_argument("members")
     parser.add_argument("password")
-    parser.add_argument("-s", "--server-url", default="http://localhost:8080/")
+    parser.add_argument("-s", "--server-url", default="http://lagrue.ninja/")
     parser.add_argument("-d", "--disable-dodo", action="store_true")
     parser.add_argument("-g", "--disable-gopher", action="store_true")
     args = parser.parse_args()

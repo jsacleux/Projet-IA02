@@ -9,7 +9,8 @@ from gndclient import Env, State, Action, Player, Cell, Time, ActionGopher
 
 
 def premier_tour(state: State) -> bool:
-    """ Cette fonction renvoie vrai si il n'y a aucune boule sur la grille"""
+    """ Cette fonction renvoie vrai si il n'y a aucune boule sur la grille.
+    Nous avons besoin de cette information pour notre ouverture. """
     for _, player in state:
         if player != 0:
             return False
@@ -17,7 +18,8 @@ def premier_tour(state: State) -> bool:
 
 
 def get_adjacent(env: Env, cell: Cell) -> list[Cell]:
-    """ Cette fonction renvoie la liste des cellules adjacentes à une cellule donnée"""
+    """ Cette fonction renvoie la liste des cellules adjacentes à une cellule donnée.
+    Elle ne renvoie pas les cellules situées en dehors de la grille."""
     x, y = cell
     board_size = env["hex_size"]
 
@@ -38,11 +40,14 @@ def get_adjacent(env: Env, cell: Cell) -> list[Cell]:
     return adjacent
 
 def play_randomly_gopher(env: Env, state: State, player: Player) -> ActionGopher :
-    """ Cette fonction renvoie une action au hasard"""
+    """ Cette fonction renvoie une action au hasard.
+    Nous utilisons le random comme garde-fou, en fin de partie."""
     return random.choice(gopherlegals(env,state,player))
 
 def gopherlegals(env: Env, state: State, player: Player) -> list[Cell]:
-    """ Cette fonction renvoie la liste des actions possibles pour un joueur"""
+    """ Cette fonction renvoie la liste des actions possibles pour un joueur.
+    Parmis les cases adjacentes dans le plateau, sont retirées celles qui sont bloquées par des pions,
+    ou adjacentes à des pions alliés ou plus de 1 pion ennemi. """
 
     cases_bloquees = set()
     cases_accessibles = set()
@@ -83,7 +88,7 @@ def get_next_moves(
     env: Env, state: State, player: Player
 ) -> tuple[list[State], list[ActionGopher]]:
     """ Cette fonction renvoie la liste des états du jeu après chaque action 
-    possible, et une liste avec les actions correspondantes"""
+    possible, et une liste avec les actions correspondantes. Nécessaire pour MCTS."""
     coups_possibles = gopherlegals(env, state, player)
     state_apres_chaque_coup_possible = []
 
@@ -105,6 +110,7 @@ def change_player(player: Player) -> int:
 def has_won(env: Env, state: State, player: Player) -> bool:
     """ Cette fonction renvoie vrai si le joueur a gagné"""
     coups_possibles_adversaire = gopherlegals(env, state, change_player(player))
+    # Si le joueur ennemi n'as plus de coups possibles, alors player gagne et la fonction retourne True.
     if coups_possibles_adversaire == []:
         return True
     return False
@@ -113,7 +119,7 @@ def has_won(env: Env, state: State, player: Player) -> bool:
 def simulate_game(
     env: Env, initial_state: State, initial_player: Player
 ) -> tuple[Action, int]:
-    """ Cette fonction renvoie le score esperé pour chaque action possible"""
+    """ Cette fonction renvoie le score esperé pour chaque action possible."""
 
     player = initial_player
     board_copy = initial_state
@@ -122,6 +128,7 @@ def simulate_game(
     next_states, next_actions = get_next_moves(env, board_copy, player)
     score = env["hex_size"] * env["hex_size"]
 
+    # La boucle simulant la fin de l'arbre avec des coups au hasard :
     while next_actions:
         action = random.choice(next_actions)
         state = next_states[next_actions.index(action)]
@@ -144,7 +151,7 @@ def simulate_game(
 def get_best_next_move(
     env: Env, current_state: State, current_player: Player,
 ) -> Cell:
-    """ Cette fonction renvoie l'action avec le meilleur score'"""
+    """ Cette fonction renvoie l'action avec le meilleur score. C'est le corps principal de MCTS. """
     evaluations: dict[str, int] = {}
 
     for _ in range(env["n_simulations"]):
@@ -172,6 +179,8 @@ def strategy_gopher_mcts(
     env: Env, state: State, player: Player, time_left: Time
 ) -> tuple[Env, Action]:
     """ Cette fonction renvoie au serveur l'environnement et l'action à jouer"""
+    # si c'est le premier tour nous jouons au centre de la grille,
+    # sinon, nous utilisons notre MCTS, avec un nombre de simulation constant au long de la partie.
     print("Time remaining ", time_left)
     if env["premier_tour"] is True:
         print("c'est le premier coup")
@@ -184,24 +193,35 @@ def strategy_gopher_mcts(
 
 
 def get_coup_strat_opti(env : Env, state : State, player : Player) -> Action:
+    """ Cette fonction permet de retourner l'action à jouer dans le cas où nous sommes le player 1,
+    et que la grille est de taille impaire. """
+
+    # Nous récupérons l'état de la grille avant le coup du joueur ennemi , et le comparons à l'état qui nous a été
+    # renvoyé. Nous permettant de récupérer le coup joué par l'adversaire.
     old_state = env["Old_state"]
     x = set(old_state)
     y = set(state)
-    set_dernier_coup = y - x
-    print(set_dernier_coup)
-    dernier_coup,dernier_joueur = next(iter(set_dernier_coup))
-    print(dernier_coup)
-    adjacents_z = get_adjacent(env, dernier_coup)
 
+    set_dernier_coup = y - x
+    dernier_coup, dernier_joueur = next(iter(set_dernier_coup))
+
+    # Ici, nous regardons les cases adjacentes au dernier coup ennemi, pour trouver le pion adjacent au dernier coup ennemi.
+    # nous avons besoin de savoir cela pour déterminer la direction à suivre.
     coup_origine = (0, 0)
+
+    adjacents_z = get_adjacent(env, dernier_coup)
 
     for case_adjacente in adjacents_z:
         for case_state in state:
             if case_state[0] == case_adjacente and case_state[1] != 0:
                 coup_origine = case_state[0]
 
-    direction_new_coup = (dernier_coup[0] - coup_origine[0], dernier_coup[1] - coup_origine[1])
 
+    # Ainsi, avec ce calcul nous connaissons la direction du coup ennemi au dernier tour, il nous suffit de jouer dans la même
+    # direction pour nécessairement gagner. Il n'est pas nécessaire de vérifier si le coup est légal, car avec cette
+    # méthode, le coup retourné l'est toujours (en grille de taille impair et en étant le premier joueur)
+
+    direction_new_coup = (dernier_coup[0] - coup_origine[0], dernier_coup[1] - coup_origine[1])
     new_coup = (direction_new_coup[0] + dernier_coup[0], direction_new_coup[1] + dernier_coup[1])
 
     return new_coup
