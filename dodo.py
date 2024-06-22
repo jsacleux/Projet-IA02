@@ -160,15 +160,14 @@ def simulate_game(
         if has_lost(env, state, player):
             # Si nous avons perdu, on a un score negatif
             if player == env["us"]:
-                score = -env["hex_size"] * env["hex_size"]
+                score = -score
             # Si nous avons gagné, on a un score positif
             else:
-                score = env["hex_size"] * env["hex_size"]
+                score = score
             # La partir est finie, on peut retourner le score associé au premier coup
             break
 
         # Si la partie n'est pas finie, continuer le while
-        score -= 1
         player = change_player(player)
         next_states, next_actions = get_next_moves(env, state, player)
 

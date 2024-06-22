@@ -177,13 +177,12 @@ def simulate_game(
         # Si la partie est finie, renvoyer les score correspondant
         if has_won(env, state, player):
             if player == env["us"]:
-                score = env["hex_size"] * env["hex_size"]
+                score = score
             else:
-                score = -env["hex_size"] * env["hex_size"]
+                score = -score
             break
 
         # Sinon continuer la partie
-        score -= 1
         player = change_player(player)
         next_states, next_actions = get_next_moves(env, state, player)
 
