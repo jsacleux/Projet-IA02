@@ -34,6 +34,6 @@ python test_client.py 12 toto totovelo
 - Absence de mécanismes d'**apprentissage** des erreurs au fil des parties.
 
 ### Les éléments à nuancer  :
-- **Performances et simplicité**. Nous avons gagné la plupart de nos matchs mais pas tous. On aurait peut être eu des résultats encore meilleurs avec une version plus complexe du MCTS (par exemple, on ne fait pas varier notre facteur d'exploration).
-- **Performances temporelles**. Nos performances temporelles étaient amplement suffisantes pour les besoins du tournoi. De ce fait, nous n'avons pas essayé d'implementer d'autres solutions pour les améliorer. Si nous en avions eu besoins, nous aurions pu utiliser du cache, ou adapter le nombre de simulations dans MCTS en fonction du temps restant.
+- **Performances et simplicité**. Nous avons gagné la plupart de nos matchs mais pas tous. On aurait peut être eu des résultats encore meilleurs avec une version plus complexe du MCTS (facteur d'exploration, prise en compte du nombre de coups jusqu'à la victoire dans le score...).
+- **Performances temporelles**. Nos performances temporelles étaient amplement suffisantes pour les besoins du tournoi. De ce fait, nous n'avons pas essayé d'implementer d'autres solutions pour les améliorer. Si nous en avions eu besoin, nous aurions pu utiliser du cache, ou encore adapter le nombre de simulations dans MCTS en fonction du temps restant ou de l'avancement de la partie (début, milieu, fin...).
 
